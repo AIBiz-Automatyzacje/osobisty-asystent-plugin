@@ -33,12 +33,12 @@ else
   fi
 
   PRIORYTET=$(echo "$FRONT" | grep '^priorytet:' | sed 's/^priorytet: *//')
-  if [ -n "$PRIORYTET" ] && [ "$PRIORYTET" != "pilne" ] && [ "$PRIORYTET" != "wazne" ] && [ "$PRIORYTET" != "normalne" ]; then
-    ERRORS="${ERRORS}Priorytet '$PRIORYTET' nieprawidłowy (pilne/wazne/normalne). "
+  if [ -n "$PRIORYTET" ] && [ "$PRIORYTET" != "pilny" ] && [ "$PRIORYTET" != "istotny" ] && [ "$PRIORYTET" != "normalny" ] && [ "$PRIORYTET" != "niski" ]; then
+    ERRORS="${ERRORS}Priorytet '$PRIORYTET' nieprawidłowy (pilny/istotny/normalny/niski). "
   fi
 fi
 
 if [ -n "$ERRORS" ]; then
-  jq -n --arg err "⚠️ Frontmatter: ${ERRORS}Wymagane: status (w_trakcie/zrobione), priorytet (pilne/wazne/normalne), termin (YYYY-MM-DD)." \
+  jq -n --arg err "⚠️ Frontmatter: ${ERRORS}Wymagane: status (w_trakcie/zrobione), priorytet (pilny/istotny/normalny/niski), termin (YYYY-MM-DD)." \
     '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":$err}}'
 fi
