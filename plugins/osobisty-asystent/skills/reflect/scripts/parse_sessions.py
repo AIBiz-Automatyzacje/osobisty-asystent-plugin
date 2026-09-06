@@ -225,9 +225,30 @@ def main():
     user_msg_count = 0
     total_pairs = 0
 
-    for mtime, path in sessions:
+    # `sessions` jest posortowane ROSNACO po mtime, wiec `break` na MAX_PAIRS wycinal
+    # dni NAJSWIEZSZE - przy --days 7 w raporcie zostawaly same najstarsze sesje.
+    # Idziemy od najnowszej; komunikat "starsze sesje pominiete" stal sie przy okazji prawdziwy.
+    for mtime, path in reversed(sessions):
         dialog = parse_session(path)
         if not dialog:
+            continue
+
+        # Pomijamy sesje-automaty: jedno wejscie uzytkownika, ktore NIE jest rozmowa.
+        # Dwa zrodla takich sesji:
+        #   * wywolanie skilla slash-komenda -> tekst zawiera <command-name>
+        #   * job crona odpalony przez `claude -p "<dlugi prompt>"` -> zwykly tekst,
+        #     wiec rozpoznajemy go po dlugosci (prompty jobow maja tysiace znakow,
+        #     a czlowiek, ktory napisal tylko raz, pisze krotko)
+        # Zmierzone na jednej dobie przed ta zmiana: 63 z 67 sesji to byly prompty jobow,
+        # czyli 89% wyjscia parsera. Poza kosztem tokenow zafalszowywalo to wynik - plik
+        # kontekstu karmil sie opisami dzialania wlasnych automatow zamiast praca uzytkownika.
+        PROG_PROMPTU_AUTOMATU = 1200
+        _users = [t for r, t in dialog if r == 'USER']
+        if len(_users) <= 1 and (
+            not _users
+            or '<command-name>' in _users[0]
+            or len(_users[0]) > PROG_PROMPTU_AUTOMATU
+        ):
             continue
 
         session_count += 1
