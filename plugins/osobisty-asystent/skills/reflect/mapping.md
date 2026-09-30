@@ -1,7 +1,7 @@
 # Mapping: Sygnały → Pliki
 
-Reflect aktualizuje TYLKO pliki osobiste/behawioralne: **persona.md**, **soul.md**,
-**content/voice-of-tone.md**.
+Reflect aktualizuje pliki osobiste/behawioralne: **persona.md**, **soul.md**,
+**content/voice-of-tone.md** oraz opis projektu w **CLAUDE.md**.
 
 **Czego reflect NIE rusza:**
 - **NOW.md** — bieżący stan/projekty → domena `memory-update`.
@@ -142,6 +142,28 @@ Sekcje persona.md odpowiadają strukturze generowanej przez `onboarding/prompt-p
 | Nowy trigger negatywny | "to mnie wkurwia w AI", "nienawidzę kiedy X" | ADD do NIE LUBIĘ |
 | Nowy energetyzator | "uwielbiam jak X", "to mnie kręci" | ADD do NAPĘDZA |
 | Usunięcie triggera | "to już nie irytuje", "przyzwyczaiłem się" | REMOVE |
+
+---
+
+## CLAUDE.md
+
+Źródła sygnałów: raport `audit_claude_md.py` (twarde rozjazdy z dyskiem) + sesje z tygodnia.
+
+| Sygnał | Przykład | Typ |
+|--------|----------|-----|
+| Ścieżka z CLAUDE.md nie istnieje | folder przeniesiony albo skasowany | UPDATE (nowa ścieżka) / REMOVE |
+| Zła liczba skilli / nieistniejący skill | „27 skilli”, a na dysku 31 | UPDATE |
+| Nowy folder główny bez opisu | `Kursy/` powstał w tym tygodniu | ADD (jedna linia) |
+| Jawna decyzja o strukturze | „od teraz grafiki trzymamy w X” | ADD/UPDATE |
+| Nowa konwencja nazw plików | „notatki ze spotkań jako DD.MM.YYYY” | ADD/UPDATE |
+| Nowy skill / hook / job, którego nie ma w listingu | „dodałem hook X” | ADD |
+| ⚠️ Preferencja osobista | „nie pisz tak długo” | → persona/soul, NIE CLAUDE.md |
+| ⚠️ Stan projektu | „live przesunięty na 22.10” | → NOW.md, NIE CLAUDE.md |
+
+Sekcję w CLAUDE.md dobieraj po znaczeniu (struktura katalogów, konwencje, skille, infra). Nowej
+sekcji nie zakładaj, jeśli pasująca istnieje.
+
+---
 
 ---
 
