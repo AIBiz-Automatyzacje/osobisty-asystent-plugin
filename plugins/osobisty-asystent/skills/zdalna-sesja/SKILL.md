@@ -20,21 +20,26 @@ Odpala i pilnuje sesji Claude Code na serwerze **z lokalnego komputera**. Nie wc
 
 ## Konfiguracja (jednorazowo)
 
-Skill czyta dane serwera z `.env` w roocie vaulta. Wymagane jest tylko `VPS_HOST`:
+Skill czyta dane serwera z `.env` w roocie vaulta. Wymagane jest JEDNO z dwóch:
 
 ```
-VPS_HOST=<tailscale-ip-serwera>     # sprawdź na VPS: tailscale ip -4
+VPS_HOST=<tailscale-ip-serwera>     # świeży VPS po B1: login jako root, Claude pod userem claude
+VPS_SSH=vps                          # albo alias z ~/.ssh/config (login od razu jako claude, bez su)
 ```
+
+`VPS_HOST` sprawdzisz na VPS komendą `tailscale ip -4`.
 
 Opcjonalne (mają rozsądne domyślne):
 
 ```
-VPS_USER=root                        # user SSH (domyślnie root)
-VPS_REMOTE_USER=claude               # user, pod którym chodzi Claude (domyślnie claude)
+VPS_USER=root                        # user SSH przy VPS_HOST (domyślnie root)
+VPS_RUN_AS=claude                    # user, pod którym chodzi Claude (przy logowaniu jako root domyślnie claude)
 VPS_VAULT_PATH=/home/claude/vault    # katalog roboczy sesji (domyślnie /home/claude/vault)
 ```
 
-Wymóg wstępny: klucz SSH roota działa do VPS po Tailscale IP (jak przy instalacji z lekcji B1).
+Starsza nazwa `VPS_REMOTE_USER` działa tak samo jak `VPS_RUN_AS`.
+
+Wymóg wstępny: klucz SSH działa do VPS po Tailscale IP (jak przy instalacji z lekcji B1).
 
 ## Komendy
 

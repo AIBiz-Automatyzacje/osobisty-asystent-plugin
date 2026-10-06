@@ -9,11 +9,12 @@
  *
  * Połączenie i przełączanie usera są DEKLARATYWNE (żadnego zgadywania kluczy/userów):
  *   VPS_SSH      — cel dla `ssh` (alias z ~/.ssh/config, np. `vps`, ALBO user@host)
- *   VPS_RUN_AS   — user, pod którym odpalić Claude; pusty = odpal jako user z logowania
+ *   VPS_RUN_AS   — user, pod którym odpalić Claude (stara nazwa VPS_REMOTE_USER też działa);
+ *                  pusty przy logowaniu jako root = claude, w pozostałych przypadkach = user z logowania
  *
  * Dwa realne tryby:
- *   • Alias z kluczem (Ty): VPS_SSH=vps                    → login jako claude, bez su
- *   • Świeży VPS po B1:     VPS_HOST=<ip> + VPS_RUN_AS=claude → login root, su - claude
+ *   • Alias z kluczem (Ty): VPS_SSH=vps     → login jako claude, bez su
+ *   • Świeży VPS po B1:     VPS_HOST=<ip>   → login root, su - claude (VPS_RUN_AS domyślnie claude)
  *
  * Użycie:
  *   node vps-session.js new <nazwa>     # nowa nazwana sesja z Remote Control
@@ -72,17 +73,26 @@ function buildAttachCommand(name, cfg) {
   return `ssh -t ${cfg.sshTarget} "${wrapRunAs(`tmux attach -t ${name}`, cfg)}"`;
 }
 
-function loadConfig() {
-  loadEnv(__dirname);
-  const sshExplicit = process.env.VPS_SSH;
-  const host = process.env.VPS_HOST;
-  const sshTarget = sshExplicit || `${process.env.VPS_USER || 'root'}@${host || ''}`;
+// Root ma zablokowane --dangerously-skip-permissions, więc przy logowaniu jako root
+// bez jawnego VPS_RUN_AS przełączamy się na claude. VPS_REMOTE_USER = stara nazwa z dokumentacji.
+function resolveConfig(env) {
+  const sshExplicit = env.VPS_SSH;
+  const host = env.VPS_HOST;
+  const sshUser = env.VPS_USER || 'root';
+  const sshTarget = sshExplicit || `${sshUser}@${host || ''}`;
+  const explicitRunAs = (env.VPS_RUN_AS || env.VPS_REMOTE_USER || '').trim();
+  const loginAsRoot = sshExplicit ? /^root@/.test(sshExplicit) : sshUser === 'root';
   return {
     sshTarget,
-    runAs: (process.env.VPS_RUN_AS || '').trim(),
-    vaultPath: process.env.VPS_VAULT_PATH || '/home/claude/vault',
+    runAs: explicitRunAs || (loginAsRoot ? 'claude' : ''),
+    vaultPath: env.VPS_VAULT_PATH || '/home/claude/vault',
     hasConnection: Boolean(sshExplicit || host),
   };
+}
+
+function loadConfig() {
+  loadEnv(__dirname);
+  return resolveConfig(process.env);
 }
 
 function requireConnection(cfg) {
@@ -90,7 +100,7 @@ function requireConnection(cfg) {
     throw new Error(
       'Brak danych serwera w .env. Dodaj JEDNO z:\n' +
       '  VPS_SSH=vps                         (alias z ~/.ssh/config — zalecane)\n' +
-      '  VPS_HOST=<ip> + VPS_RUN_AS=claude   (świeży VPS, login jako root)'
+      '  VPS_HOST=<ip>                       (świeży VPS, login jako root, Claude pod userem claude)'
     );
   }
 }
@@ -167,4 +177,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { validateName, buildInner, buildRemoteCommand, buildAttachCommand, wrapRunAs, main };
+module.exports = { validateName, resolveConfig, buildInner, buildRemoteCommand, buildAttachCommand, wrapRunAs, main };
