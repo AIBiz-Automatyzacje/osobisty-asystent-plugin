@@ -1,61 +1,92 @@
 # Osobisty Asystent AI
 
-Plugin Akademii Automatyzacji, który stawia Twojego osobistego asystenta AI w Obsidian + Claude Code. Wpisujesz jedną komendę, przechodzisz rozmowę, a asystent sam buduje Ci gotową przestrzeń do pracy — Twój profil, swój charakter i system zadań.
+Plugin Akademii Automatyzacji, który stawia Twojego osobistego asystenta AI w Obsidian + Claude Code. Wpisujesz jedną komendę, przechodzisz rozmowę, a asystent sam buduje Ci gotową przestrzeń do pracy: Twój profil, swój charakter i listę zadań.
 
 ## Co dostajesz
 
-Wizard `onboarding` przeprowadza Cię przez wywiad i tworzy:
+Wizard `/onboard` przeprowadza Cię przez wywiad i tworzy:
 
 - `persona.md` — Twój profil (kim jesteś, jak pracujesz, jak chcesz rozmawiać z AI)
 - `soul.md` — charakter asystenta dopasowany do Ciebie
 - `biznes.md` — kontekst Twojej firmy lub pracy (opcjonalny)
-- `environment.md` — wykryte środowisko maszyny
-- strukturę folderów: `Zadania/` (dashboard, projekty, cykliczne) i `Zasoby/`
-- `CLAUDE.md` — router, który spina to wszystko w całość
+- `environment.md` — wykryte środowisko komputera
+- `Zadania/Dashboard.md` — lista zadań (jedno zadanie = jedna linia) i folder `Zasoby/`
+- `CLAUDE.md` — mapa, która spina to wszystko w całość
 
-Plus 4 skille do codziennej pracy:
+Skille do codziennej pracy:
 
-- `/daily` — poranne porządki: archiwizuje zrobione zadania, regeneruje dashboard, pokazuje co na dziś
-- `/memory-update` — aktualizuje `NOW.md` (bieżący kontekst pracy) z logów sesji
-- `/reflect` — po sesji analizuje rozmowę i kalibruje Twój profil oraz styl asystenta
-- `/utworz-zadanie` — tworzy zadanie z priorytetem, terminem i projektem
+- `/daily` — poranne porządki: archiwizuje odhaczone zadania, dorzuca cykliczne, układa Dashboard według terminów
+- `/utworz-zadanie` — dopisuje zadanie do Dashboardu (nazwa, priorytet, termin)
+- `/memory-update` — aktualizuje `NOW.md` (bieżący kontekst pracy) z Twoich rozmów
+- `/reflect` — analizuje sesje i proponuje poprawki w profilu i stylu asystenta
+- `/skill-scout` — raz w tygodniu wyłapuje powtarzalną robotę, którą warto zamienić w skill
+
+Zaawansowane (dalsze moduły kursu): `/zdalna-sesja`, `/deleguj`, `/plugin-zespolowy` — opis niżej.
 
 ## Czego potrzebujesz
 
-1. **Obsidian** — https://obsidian.md (darmowy)
-2. **Claude Code** — https://claude.com/claude-code + aktywna subskrypcja Claude (wystarczy najtańszy plan)
-3. Wtyczka terminala w Obsidianie (community plugin), żeby mieć terminal w jednym oknie z notatkami
+- **Subskrypcja Claude** (wystarczy najtańszy plan) — https://claude.com/pricing
+- Komputer z macOS albo Windowsem (Obsidian w telefonie nie ma terminala)
+
+Resztę doinstaluje skrypt z kroku 1.
 
 ## Instalacja
 
+### 1. Przygotuj komputer (jedna komenda)
+
+Skrypt sprawdza i doinstalowuje wszystko, czego potrzebuje asystent: Git, Python, Node.js, GitHub CLI, Obsidian i Claude Code. To, co już masz, zostawia w spokoju, więc możesz go odpalać wielokrotnie.
+
+**macOS** — otwórz Terminal (⌘ Spacja → „Terminal”) i wklej:
+
+```
+curl -fsSL https://raw.githubusercontent.com/AIBiz-Automatyzacje/osobisty-asystent-plugin/main/scripts/przygotuj.sh | bash
+```
+
+**Windows** — otwórz PowerShell (Start → wpisz „PowerShell”, zwykłe uruchomienie, nie jako administrator) i wklej:
+
+```
+irm https://raw.githubusercontent.com/AIBiz-Automatyzacje/osobisty-asystent-plugin/main/scripts/przygotuj.ps1 | iex
+```
+
+Po skończeniu zamknij okno i otwórz nowe — dopiero nowe widzi świeżo zainstalowane programy.
+
+### 2. Vault i wtyczki w Obsidianie
+
 1. Otwórz Obsidiana i utwórz nowy vault (to po prostu folder na Twoje pliki).
-2. W ustawieniach Obsidiana włącz community plugin z terminalem i otwórz terminal w vaultcie.
-3. W terminalu uruchom asystenta: `claude`
-4. Dodaj marketplace pluginu:
+2. **Ustawienia → Wtyczki społeczności → Włącz** (jeśli widzisz tryb ograniczony), potem **Przeglądaj** i zainstaluj + włącz trzy wtyczki:
+   - **Terminal** (autor: polyipseity) — terminal w Obsidianie
+   - **BRAT** — instaluje wtyczki prosto z GitHuba
+   - **Hidden Folders Access** — pokazuje ukryty folder `.claude`, w którym żyją pliki asystenta
+3. Paleta komend (`Cmd + P` / `Ctrl + P`) → **BRAT: Add a beta plugin for testing** → wklej `AIBiz-Automatyzacje/obsidian-claude-launcher` → **Add plugin**.
+4. W lewym pasku pojawi się ikonka Claude Code Launchera. Kliknij ją — w vaultcie otworzy się sesja Claude Code.
 
-   ```
-   /plugin marketplace add AIBiz-Automatyzacje/osobisty-asystent-plugin
-   ```
+Szczegóły launchera: https://github.com/AIBiz-Automatyzacje/obsidian-claude-launcher
 
-5. Zainstaluj plugin:
+### 3. Plugin asystenta
 
-   ```
-   /plugin install osobisty-asystent
-   ```
+W sesji Claude Code wpisz:
 
-6. Odpal konfigurację — wpisz:
+```
+/plugin marketplace add AIBiz-Automatyzacje/osobisty-asystent-plugin
+```
 
-   ```
-   onboarding
-   ```
+```
+/plugin install osobisty-asystent@osobisty-asystent
+```
 
-7. Przejdź całą rozmowę. Odpowiadaj tak dokładnie, jak potrafisz — im więcej powiesz, tym lepiej asystent się pod Ciebie dopasuje. Zarezerwuj sobie na to około godziny.
+Zamknij sesję i otwórz nową (ikonka launchera), żeby skille się wczytały.
 
-Po skończonym onboardingu masz gotowy system. `NOW.md` powstanie sam przy pierwszym `/memory-update`.
+### 4. Onboarding
 
-## Kalendarz (opcjonalnie)
+Wpisz:
 
-Skill `/daily` może pokazać Twój kalendarz Google w porannym raporcie. Wymaga skilla `gog` i adresu Google podanego w konfiguracji pluginu (`gog_account`). Bez tego `/daily` działa normalnie, tylko bez sekcji kalendarza.
+```
+/onboard
+```
+
+Przejdź całą rozmowę (ok. 15–20 minut). Odpowiadaj tak dokładnie, jak potrafisz — im więcej powiesz, tym lepiej asystent się do Ciebie dopasuje. Po skończonym onboardingu masz gotowy system. `NOW.md` powstanie sam przy pierwszym `/memory-update`.
+
+Wygląd listy zadań i Skrzynki zmienił się po aktualizacji pluginu? `/onboard --refresh-theme` odświeża same style, bez ponownego wywiadu.
 
 ## Zaawansowane — asystent w kieszeni (Poziom 2)
 
@@ -72,8 +103,9 @@ VPS_RUN_AS=claude
 
 Wymaga działającego dostępu SSH do VPS oraz Claude Code w wersji ≥ 2.1.51 na serwerze (Remote Control). Komendy: `new <nazwa>` (nowa sesja), `list` (żywe sesje), `kill <nazwa>`, `attach <nazwa>`.
 
-## Moduł C — plugin zespołowy (Team OS)
+## Moduł C — Team OS
 
+- `/deleguj` — wiadomości i zadania między asystentami członków zespołu przez wspólną Skrzynkę (wymaga Pulsa i huba Team OS).
 - `/plugin-zespolowy` — buduje i utrzymuje wspólny plugin Waszego zespołu:
   - `init` — stawia repo pluginu od zera: manifesty, README z instrukcją instalacji dla zespołu, strażnik sekretów (skill bez klucza nie wystartuje) oraz mechanikę **kontekstu firmowego**: skille `kontekst-sygnaly` i `kontekst-firmowy` plus hook, który rozdaje `company-context.md` wszystkim przy starcie sesji.
   - `add <skill>` — przenosi skill z Twojego `.claude/skills/` do pluginu, z audytem przed kopiowaniem: wklejone klucze i sztywne ścieżki nie przejdą.
