@@ -47,13 +47,13 @@ Pola:
 - Oceny jakości pracy usera
 - Jednorazowe polecenia techniczne ("popraw ten błąd", "zmień kolor")
 - Systemowe komendy i ich output
-- Informacje które są już w persona.md / biznes.md / soul.md (nie duplikuj stałych cech)
+- Informacje które są już w persona.md / biznes.md / soul.md (nie duplikuj stałych cech ani kontekstu firmy)
 
 ## Wskazówki
 
 - Skup się na FAKTACH i EXPLICITE STATEMENTS
-- "User napisał: 'rezygnuję z Voiceflow'" = OK (HIGH, jest cytat)
-- "User wydaje się sfrustrowany Voiceflow" = ZAKAZANE
+- "User napisał: 'rezygnuję z Trello'" = OK (HIGH, jest cytat)
+- "User wydaje się sfrustrowany Trello" = ZAKAZANE
 - Gdy user pracuje nad projektem ale nie mówi o nim wprost → MEDIUM (fakt że pracował)
 - Preferuj mniej sygnałów wysokiej jakości niż dużo niskiej
 - Jeśli sesja to głównie debugging jednego buga — wyciągnij bloker, nie projekt

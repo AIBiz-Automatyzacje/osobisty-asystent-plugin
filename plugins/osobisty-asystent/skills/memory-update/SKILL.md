@@ -53,12 +53,12 @@ Przeczytaj `.claude/rules/NOW.md` — weź timestamp z `*Ostatni update: YYYY-MM
 ### 3d. Parsuj logi sesji
 
 ```bash
-$PYTHON .claude/skills/memory-update/scripts/parse_sessions.py --since "{timestamp}" 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
+$PYTHON {baseDir}/scripts/parse_sessions.py --since "{timestamp}" 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
 ```
 
 Lub catchup:
 ```bash
-$PYTHON .claude/skills/memory-update/scripts/parse_sessions.py --days 3 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
+$PYTHON {baseDir}/scripts/parse_sessions.py --days 3 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
 ```
 
 Sprawdź statystyki:
@@ -72,7 +72,7 @@ Jeśli 0 sesji → powiedz "Brak nowych sesji do przeanalizowania" i zakończ.
 
 Wczytaj prompt ekstrakcji:
 ```
-.claude/skills/memory-update/prompts/extract.md
+{baseDir}/prompts/extract.md
 ```
 
 Wczytaj dialog z parsera:
@@ -80,15 +80,13 @@ Wczytaj dialog z parsera:
 cat .claude/tmp/mu-dialog.txt
 ```
 
-**WAŻNE:** Jeśli dialog jest bardzo długi (>50K znaków), przetwarzaj w kawałkach — sesja po sesji.
-
 Przeanalizuj dialog zgodnie z promptem ekstrakcji. Wygeneruj listę sygnałów JSON.
 
 ### 5d. Merge do NOW.md
 
 Wczytaj:
 - Aktualny `.claude/rules/NOW.md`
-- Prompt merge: `.claude/skills/memory-update/prompts/merge.md`
+- Prompt merge: `{baseDir}/prompts/merge.md`
 - Sygnały z kroku 4d
 
 Wygeneruj zaktualizowany NOW.md zgodnie z zasadami merge. Zaktualizuj timestamp na bieżący.
@@ -112,12 +110,12 @@ git log --since="7 days ago" --oneline -- .claude/rules/NOW.md
 git diff "$(git log --since='7 days ago' --format='%H' -- .claude/rules/NOW.md | tail -1)"..HEAD -- .claude/rules/NOW.md
 ```
 
-Jeśli brak commitów z ostatnich 7 dni, pomiń to źródło.
+Jeśli brak commitów z ostatnich 7 dni albo vault nie jest repozytorium gita (brak `.git` — typowe u nowych osób), pomiń to źródło bez komunikatu o błędzie.
 
 **Źródło 2 — Surowe logi sesji z 7 dni:**
 
 ```bash
-$PYTHON .claude/skills/memory-update/scripts/parse_sessions.py --days 7 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
+$PYTHON {baseDir}/scripts/parse_sessions.py --days 7 2>.claude/tmp/mu-stats.txt > .claude/tmp/mu-dialog.txt
 ```
 
 Sprawdź statystyki:
@@ -131,7 +129,7 @@ Jeśli 0 sesji → powiedz "Brak sesji z ostatniego tygodnia" i zakończ.
 
 Wczytaj prompt ekstrakcji weekly:
 ```
-.claude/skills/memory-update/prompts/weekly-extract.md
+{baseDir}/prompts/weekly-extract.md
 ```
 
 Przekaż do analizy:
@@ -139,13 +137,13 @@ Przekaż do analizy:
 - Dialog z parsera (źródło 2)
 - Aktualny NOW.md
 
-**WAŻNE:** 7 dni logów to dużo danych. Jeśli dialog >50K znaków, przetwarzaj w kawałkach ale trzymaj notatki cross-session (to cały sens weekly — widzieć wzorce między sesjami).
+W weekly szukaj wzorców między sesjami — sygnał powtarzający się w kilku sesjach waży więcej niż jednorazowy.
 
 ### 4w. Merge tygodniowy do NOW.md
 
 Wczytaj:
 - Aktualny `.claude/rules/NOW.md`
-- Prompt merge weekly: `.claude/skills/memory-update/prompts/weekly-merge.md`
+- Prompt merge weekly: `{baseDir}/prompts/weekly-merge.md`
 - Sygnały z kroku 3w
 
 Wygeneruj zaktualizowany NOW.md. Weekly PRZEPISUJE sekcje (nie tylko dopisuje). Zaktualizuj timestamp na bieżący.
@@ -198,7 +196,7 @@ NA TAPECIE (zaktualizowane):
 
 ## Zasady ogólne
 
-- NOW.md max **120 linii**
+- NOW.md max **8 000 znaków** (`wc -m`), liczba linii bez znaczenia
 - **NIE duplikuj** info z innych plików w `.claude/rules/` ładowanych do kontekstu
 - **NIE interpretuj emocji** usera — tylko fakty i explicite statements
 - Confidence **LOW → odrzuć** (nie zapisuj)

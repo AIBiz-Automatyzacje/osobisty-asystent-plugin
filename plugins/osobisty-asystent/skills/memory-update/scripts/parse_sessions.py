@@ -16,11 +16,11 @@ Output: czysty dialog na stdout, statystyki na stderr
 """
 
 import os
-import re
 import sys
 import json
 import datetime
 import argparse
+import re
 
 # Cross-platform: wymuś UTF-8 stdout (Windows cp1250 → UnicodeEncodeError przy emoji/PL)
 if sys.stdout.encoding != "utf-8":
@@ -34,7 +34,6 @@ if sys.stdout.encoding != "utf-8":
 
 MIN_MSG_LENGTH = 10  # wiadomosci krotsze sa filtrowane
 MAX_ASSISTANT_LENGTH = 2000  # truncate dlugich odpowiedzi
-MAX_PAIRS = 500  # limit par user+assistant
 
 SYSTEM_COMMANDS = {
     '/clear', '/daily', '/help', '/compact', '/cost', '/doctor',
@@ -223,7 +222,6 @@ def main():
     output_lines = []
     session_count = 0
     user_msg_count = 0
-    total_pairs = 0
 
     for mtime, path in sessions:
         dialog = parse_session(path)
@@ -243,13 +241,7 @@ def main():
 
         for role, text in dialog:
             output_lines.append(f"[{role}]: {text}\n")
-            if role == 'USER':
-                total_pairs += 1
 
-        # Limit total pairs
-        if total_pairs >= MAX_PAIRS:
-            output_lines.append(f"\n[...limit {MAX_PAIRS} par osiagniety, starsze sesje pominiete]")
-            break
 
     # Stats to stderr
     earliest = sessions[0][0].strftime('%H:%M')

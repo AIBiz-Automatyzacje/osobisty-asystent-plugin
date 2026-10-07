@@ -63,8 +63,11 @@ Zaktualizuj NOW.md na podstawie nowych sygnałów z sesji. NOW.md to dynamiczny 
 
 ## Ograniczenia
 
-- **Max 120 linii** — jeśli zbliżasz się do limitu, usuń najstarsze wpisy
-- **NIE duplikuj** info z persona.md (styl komunikacji), biznes.md (model biznesowy, stack, platformy), soul.md (charakter AI)
+- **Max 8 000 znaków** (sprawdź `wc -m`), liczba linii nie ma znaczenia — wiersz tabeli to nie miejsce na akapit. Jeśli przekraczasz, tnij najstarsze wpisy i szczegóły projektów
+- **Szczegóły projektu → plik projektu, nie NOW.md.** Numery slajdów, linie scenariusza, nazwy plików roboczych, listy podzadań idą do `_KONTEKST.md` projektu (`Zadania/projekty/<projekt>/`); gdy projekt nie ma takiego pliku, szczegóły pomiń. W NOW.md zostaje jedno zdanie stanu + deadline + bloker
+- **Zero event logu**: „wpis opublikowany", „oferta wysłana", „raport ✅" nie wchodzą. Wklejki i listy „do skopiowania" nie wchodzą
+- **Reguły pracy nie wchodzą** — trwałe zasady (jak pracować, czego unikać) idą do persona.md przez `/reflect`, nie do „Ostatnie ustalenia"
+- **NIE duplikuj** info z persona.md (styl komunikacji), biznes.md (model biznesowy, produkty, platformy), soul.md (charakter AI)
 - **Zaktualizuj timestamp** "Ostatni update" na bieżącą datę i godzinę
 - **Sekcje mogą być puste** — nie usuwaj nagłówków, zostaw `- (brak)` jeśli sekcja jest pusta
 

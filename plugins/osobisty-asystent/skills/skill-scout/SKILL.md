@@ -29,7 +29,7 @@ Domyślnie **7 dni**. Jeśli user poda argument (`14`, `21`, `30`) — użyj go.
 ```bash
 PYTHON=$(command -v python3 || command -v python)
 DAYS=7   # nadpisz wartością z argumentu, jeśli podana
-$PYTHON .claude/skills/skill-scout/scripts/parse_intents.py --days "$DAYS" --out /tmp/scout-intents.json
+$PYTHON {baseDir}/scripts/parse_intents.py --days "$DAYS" --out /tmp/scout-intents.json
 ```
 
 Skrypt wypisuje na stderr ile sesji i próśb znalazł. Jeśli `count: 0` → powiedz, że w tym oknie
@@ -104,7 +104,7 @@ Zapisz JSON i odpal generator:
 
 ```bash
 # zapisz dane do Zasoby/raporty/skill-scout/data/YYYY-MM-DD.json (struktura niżej), potem:
-node .claude/skills/skill-scout/scripts/generate-raport.mjs Zasoby/raporty/skill-scout/data/$(date +%F).json
+node {baseDir}/scripts/generate-raport.mjs Zasoby/raporty/skill-scout/data/$(date +%F).json
 ```
 
 Struktura JSON wejściowego dla generatora:

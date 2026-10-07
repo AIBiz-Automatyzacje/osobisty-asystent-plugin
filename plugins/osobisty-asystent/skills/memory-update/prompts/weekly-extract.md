@@ -42,14 +42,14 @@ Zwróć JSON array sygnałów:
   {
     "kategoria": "PROJEKTY",
     "typ": "KONSOLIDACJA",
-    "tresc": "Dashboard analityczny: przeszedł z Fazy 3.1 do 3.2, dodano filtr zakresu dat i adaptacyjną granularność wykresu. Faza 3.3 (geografia) zaparkowana.",
+    "tresc": "Oferta dla sieci hurtowni: z etapu wyceny przeszła do negocjacji, dodano wariant roczny. Wariant z rabatem ilościowym zaparkowany.",
     "zrodlo": "logi z 3 sesji + git diff",
     "pewnosc": "HIGH"
   },
   {
     "kategoria": "STALLED",
     "typ": "NOWY",
-    "tresc": "Czytadełko — w NOW.md jako aktywny, zero wzmianek w logach z całego tygodnia",
+    "tresc": "Newsletter firmowy — w NOW.md jako aktywny, zero wzmianek w logach z całego tygodnia",
     "zrodlo": "brak w logach",
     "pewnosc": "HIGH"
   }

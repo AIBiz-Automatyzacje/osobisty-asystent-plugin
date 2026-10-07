@@ -18,15 +18,15 @@ Wiele atomowych wpisów daily o tym samym projekcie/temacie → **jeden zbiorczy
 
 Zamiast:
 ```
-- 2026-03-28: Live 02.04 — dodano 3 sekcje prezentacji
-- 2026-03-29: Live 02.04 — pixel art grafiki, 8-bit styl
-- 2026-03-30: Live 02.04 — roast zrobiony, SMS kampania
-- 2026-04-01: Live 02.04 — 13 sekcji, oferta -50%
+- 2026-03-28: Webinar 02.04 — dodano 3 sekcje prezentacji
+- 2026-03-29: Webinar 02.04 — grafiki gotowe
+- 2026-03-30: Webinar 02.04 — próba generalna, przypomnienia mailowe
+- 2026-04-01: Webinar 02.04 — 13 sekcji, oferta -30%
 ```
 
 Napisz:
 ```
-- 2026-04-01: Live 02.04 — prezentacja ukończona (13 sekcji, pixel art 8-bit), SMS kampania (5 SMS, Twilio/n8n), oferta AA -50% = 1500 PLN. Roast + sekcja sprzedażowa gotowe.
+- 2026-04-01: Webinar 02.04 — prezentacja ukończona (13 sekcji, grafiki), przypomnienia mailowe (3 wysyłki), oferta -30%. Próba generalna i część sprzedażowa gotowe.
 ```
 
 Jeden wpis, pełny obraz, data ostatniego update'u.
@@ -90,7 +90,9 @@ Po cleanup skonsoliduj: wiele ustaleń dot. jednego projektu → jeden wpis.
 
 ## Ograniczenia
 
-- **Max 120 linii** — weekly powinien ZMNIEJSZAĆ liczbę linii (konsolidacja), nie zwiększać
+- **Max 8 000 znaków** (sprawdź `wc -m`) — weekly ma ZMNIEJSZAĆ rozmiar pliku, nie zwiększać. Liczba linii nie ma znaczenia
+- **Szczegóły projektu → plik projektu** (`Zadania/projekty/<projekt>/_KONTEKST.md`), w NOW.md zostaje zdanie stanu + deadline + bloker
+- **Sekcje „Wklejki", „Wcześniejsze (bez zmian)", listy meta-wzorców — usuń.** Reguły pracy idą do persona.md przez `/reflect`, nie tutaj
 - **NIE duplikuj** info z persona.md, biznes.md, soul.md
 - **Zaktualizuj timestamp** na bieżącą datę i godzinę
 - **Sekcje mogą być puste** — nie usuwaj nagłówków, zostaw `- (brak)` jeśli sekcja jest pusta
