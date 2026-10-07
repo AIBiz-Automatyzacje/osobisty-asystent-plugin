@@ -1,80 +1,95 @@
 /* ═══════════════════════════════════════════════════════════════
-   Skrzynka.md — Team OS (redesign 07.2026, ciepły grafit)
+   Skrzynka.md — Team OS (redesign 09.2026, „tusz": barwy AA na tle vaulta)
    Aktywny tylko na stronach z `cssclasses: skrzynka` (frontmatter domergowuje
    sam renderer przy każdym pullu — snippet bez tej klasy nic nie stylowałby).
-   Markdown + inline spany (os-*) generuje inbox-pull (Puls);
-   wzorzec: mockup-skrzynka.html (projekt personal-team-os).
-   Paleta 1:1 z dashboard-todo.css.
+   Markdown + inline spany (os-*) generuje inbox-pull (Puls).
+   Paleta 1:1 z dashboard-todo.css. Pomarańcz AA = „Otrzymane" (Twój ruch)
+   i „czeka za długo" (os-wait.stale). Nagłówki rozpoznawane po tekście,
+   więc działa z emoji w nagłówkach i bez.
 
-   ⚠️ Wymaga Obsidiana z Chromium 105+ (selektor `:has()` — 13 użyć niżej).
+   ⚠️ Wymaga Obsidiana z Chromium 105+ (selektor `:has()`).
    Na starym Obsidianie karty wyglądają jak surowe callouty; lekarstwem jest
    AKTUALIZACJA OBSIDIANA, nie przepisywanie tego pliku (decyzja 05.08.2026).
 
    Ten plik i renderer `scripts/inbox/inbox-pull.mjs` (repo claude-cron) są
-   PARĄ — rozjazd psuje wygląd u wszystkich naraz. Zsynchronizowany
-   05.08.2026 z rendererem po Fazach 1–4 „naprawy Team OS".
+   PARĄ — rozjazd psuje wygląd u wszystkich naraz.
    Job „Puls — kontrola spójności" porównuje ten szablon ze snippetem
    w vaultcie i zgłasza rozjazd jako zadanie; naprawa = `/onboard --refresh-theme`.
    ═══════════════════════════════════════════════════════════════ */
 
 .skrzynka {
-  --sk-bg: #2a2724;
-  --sk-card: #35322d;
-  --sk-line: #47433c;
-  --sk-ink: #f0eadd;
-  --sk-sub: #b3aa99;
-  --sk-mute: #7e776b;
-  --sk-coral: #ff8a70;
-  --sk-honey: #f0b350;
-  --sk-honey-line: #66573a;
-  --sk-sage: #6cc795;
-  --sk-sage-soft: #333a34;
-  --sk-sky: #7db4ea;
-  --sk-lav: #b3a5f5;
-  --sk-lav-line: #56506e;
-  --sk-pill: #423e37;
+  --sk-card: rgba(242, 239, 232, 0.045);
+  --sk-card-solid: color-mix(in srgb, #F2EFE8 4.5%, var(--background-primary));
+  --sk-line: rgba(242, 239, 232, 0.10);
+  --sk-ink: #F2EFE8;
+  --sk-sub: #A39E94;
+  --sk-mute: #6F6B64;
+  --sk-orange: #E8590C;
+  --sk-green: #2F9E44;
+  --sk-green-soft: rgba(47, 158, 68, 0.12);
+  --sk-green-line: rgba(47, 158, 68, 0.35);
+  --sk-pill: rgba(242, 239, 232, 0.08);
+  --sk-dark: #1E1D1B;
 }
 
-/* ── Tło — grafit z ciepłym glow, spójne z dashboardem ── */
-.markdown-preview-view.skrzynka,
-.markdown-source-view.skrzynka .cm-scroller {
-  background: var(--sk-bg);
+/* ── Tło — kolor motywu + kratka i ziarno papieru, jak dashboard-tusz ── */
+.markdown-preview-view.skrzynka {
   background-image:
-    radial-gradient(at 18% -4%, rgba(240, 179, 80, 0.05) 0, transparent 45%),
-    radial-gradient(at 100% 110%, rgba(255, 138, 112, 0.04) 0, transparent 40%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.93 0 0 0 0 0.9 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(rgba(242, 239, 232, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 239, 232, 0.028) 1px, transparent 1px);
+  background-size: 160px 160px, 32px 32px, 32px 32px;
+  background-attachment: local;
   color: var(--sk-ink);
 }
 .skrzynka .markdown-preview-sizer { max-width: 780px; }
 .markdown-preview-view.skrzynka a.internal-link,
 .markdown-preview-view.skrzynka a {
-  color: var(--sk-sky);
+  color: var(--sk-ink);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--sk-sub);
+  text-underline-offset: 3px;
 }
-.markdown-preview-view.skrzynka .metadata-container { display: none; }
+/* właściwości (frontmatter) ukryte w obu trybach — jak w dashboard-tusz.css */
+.markdown-preview-view.skrzynka .metadata-container,
+.markdown-source-view.skrzynka .metadata-container,
+.markdown-source-view.is-live-preview.skrzynka .metadata-container {
+  display: none !important;
+}
 
 /* Obsidian dokłada inline title z nazwy pliku nad H1 „📬 Skrzynka" — chowamy duplikat */
 .skrzynka .inline-title { display: none; }
 
 .markdown-preview-view.skrzynka h1 {
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--sk-ink);
+  border-bottom: none;
+  margin-bottom: 4px;
+}
+
+/* ── Sekcje: nagłówki po tekście (bez emoji) ──
+   Otrzymane = pomarańcz AA (tu jest Twój ruch), Wysłane = krem (czekasz na innych). */
+.skrzynka .el-h2 h2 {
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.01em;
   color: var(--sk-ink);
-  border-bottom: none;
-  margin-bottom: 6px;
-}
-
-/* ── Sekcje: 📥 coral, 📤 honey; licznik pod nagłówkiem jako pill ── */
-.skrzynka .el-h2 h2 {
-  font-size: 16.5px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
   border: none;
-  margin: 26px 0 8px;
+  margin: 26px 0 6px;
 }
-.skrzynka .el-h2:has(h2[data-heading^="📥"]) h2 { color: var(--sk-coral); }
-.skrzynka .el-h2:has(h2[data-heading^="📤"]) h2 { color: var(--sk-honey); }
+.skrzynka .el-h2:has(h2[data-heading*="Otrzymane"]) h2 { color: var(--sk-orange); }
+.skrzynka .el-h2:has(h2[data-heading*="Wysłane"]) h2 { color: var(--sk-ink); }
+/* granica Otrzymane | Wysłane — ta sama linia co przed „Zaległe" */
+.skrzynka .el-h2:has(h2[data-heading*="Wysłane"]) {
+  margin-top: 14px;
+  border-top: 1px solid var(--sk-line);
+}
+.skrzynka .el-h2:has(h2[data-heading*="Wysłane"]) h2 { margin-top: 16px; }
+/* licznik („2 nowych") przyklejony do nagłówka, nie wisi osobno */
+.skrzynka .el-h2 + .el-p > p { margin: 0 0 12px; }
 .skrzynka .el-p em {
   font-style: normal;
   font-size: 12px;
@@ -96,12 +111,12 @@
   border-radius: 16px;
   padding: 13px 16px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   mix-blend-mode: normal;
   --callout-color: 179, 170, 153;
 }
+/* nowe = kremowy pasek, jak baner Skrzynki na Dashboardzie */
 .skrzynka .callout[data-callout-metadata="fresh"] {
-  border-left: 4px solid var(--sk-coral);
+  border-left: 4px solid var(--sk-ink);
 }
 
 /* Zero pustki po markerach: renderer kończy KAŻDĄ kartę linią komentarza
@@ -121,9 +136,9 @@
   padding: 0;
 }
 .skrzynka .callout .callout-title-inner {
-  font-size: 16.5px;
-  font-weight: 800;
-  letter-spacing: -0.015em;
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--sk-ink);
 }
 
@@ -145,12 +160,12 @@
   border: 1px solid var(--sk-line);
   color: var(--sk-sub);
 }
-.skrzynka .os-tag.t-task { color: var(--sk-sky); }
-.skrzynka .os-tag.t-query { color: var(--sk-honey); }
-.skrzynka .os-tag.t-reply { color: var(--sk-sage); }
+.skrzynka .os-tag.t-task,
+.skrzynka .os-tag.t-query { color: var(--sk-ink); }
+.skrzynka .os-tag.t-reply { color: var(--sk-sub); }
 /* `close` renderer wciąż emituje (TYPE_EMOJI/TYPE_LABEL) — wątek domknięty, stąd wyciszenie */
 .skrzynka .os-tag.t-close { color: var(--sk-mute); }
-.skrzynka .os-tag.t-new { background: var(--sk-coral); border-color: var(--sk-coral); color: #2a2724; letter-spacing: 0.02em; }
+.skrzynka .os-tag.t-new { background: var(--sk-ink); border-color: var(--sk-ink); color: var(--sk-dark); }
 .skrzynka .os-meta {
   margin-left: auto;
   font-size: 12.5px;
@@ -164,40 +179,40 @@
 .skrzynka .callout .callout-content li::marker { content: none !important; }
 .skrzynka .callout .callout-content .list-bullet { display: none !important; }
 /* scope TYLKO na callouty wątków — delegated ma własny layout */
-.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(.task-list-item)) {
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) {
   list-style: none !important;
   margin: 6px 0 2px;
   padding-left: 4px !important;
   margin-inline-start: 0 !important;
   position: relative;
 }
-.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(.task-list-item))::before {
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item))::before {
   content: "";
   position: absolute;
   left: 16px;
   top: 16px;
   bottom: 16px;
   width: 2px;
-  background: color-mix(in srgb, var(--sk-line) 80%, var(--sk-sub));
+  background: rgba(242, 239, 232, 0.14);
   border-radius: 2px;
 }
-.skrzynka .callout .callout-content ul:not(:has(.task-list-item)):has(li:only-child)::before { display: none; }
+.skrzynka .callout .callout-content ul:not(:has(> li.task-list-item)):has(li:only-child)::before { display: none; }
 /* awatar absolute + wcięcie — treść płynie normalnie (grid robił z każdego spanu osobny item) */
-.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(.task-list-item)) > li {
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li {
   position: relative;
   padding: 7px 0 7px 38px;
   font-size: 14px;
   line-height: 1.55;
   color: var(--sk-ink);
 }
-.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(.task-list-item)) > li:last-child::after {
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li:last-child::after {
   content: "";
   position: absolute;
   left: 10px;
   top: 40px;
   bottom: -4px;
   width: 8px;
-  background: var(--sk-card);
+  background: var(--sk-card-solid);
 }
 
 .skrzynka .os-av {
@@ -218,15 +233,16 @@
      więc te reguły przestawiają inicjał z powrotem na grafit. */
   color: var(--sk-ink);
   background: var(--sk-pill);
-  box-shadow: 0 0 0 4px var(--sk-card);
+  box-shadow: 0 0 0 4px var(--sk-card-solid);
 }
-.skrzynka .os-av.u-kacper { background: var(--sk-sky); color: #2a2724; }
-.skrzynka .os-av.u-marcin { background: var(--sk-honey); color: #2a2724; }
-.skrzynka .os-av.u-filip { background: var(--sk-sage); color: #2a2724; }
-.skrzynka .os-av.u-mateusz { background: var(--sk-coral); color: #2a2724; }
+/* Awatary w barwach AA: wszyscy neutralni (kremowy inicjał na szarym pillu),
+   Twoje wiadomości (klasa `me` z renderera) = pełny krem, agent = obwódka przerywana. Kolor nie rozróżnia osób —
+   robi to inicjał i @imię obok. */
+.skrzynka .os-av.me { background: var(--sk-ink); color: var(--sk-dark); }
 .skrzynka .os-av.u-bot {
-  background: color-mix(in srgb, var(--sk-lav) 14%, var(--sk-card));
-  border: 2px solid var(--sk-lav);
+  background: transparent;
+  border: 2px dashed var(--sk-sub);
+  color: var(--sk-sub);
   font-size: 13px;
 }
 /* wariant mały (`os-av s`) — renderer wspiera go w avatarSpan; stare archiwa go zawierają */
@@ -244,20 +260,20 @@
 
 /* wiadomość agenta — lawendowy bąbel, badge AUTO, pill źródła */
 .skrzynka .callout .callout-content li:has(.os-av.u-bot) {
-  background: color-mix(in srgb, var(--sk-lav) 8%, var(--sk-card));
-  border: 1px solid var(--sk-lav-line);
-  border-left: 3px solid var(--sk-lav);
+  background: var(--sk-pill);
+  border: 1px solid var(--sk-line);
+  border-left: 3px solid var(--sk-sub);
   border-radius: 4px 12px 12px 12px;
   padding: 8px 10px 8px 42px !important;
   margin: 4px 0;
 }
 .skrzynka .callout .callout-content li:has(.os-av.u-bot) .os-av { left: 8px; box-shadow: none; }
-.skrzynka .callout .callout-content li:has(.os-av.u-bot) .os-who { color: var(--sk-lav); }
+.skrzynka .callout .callout-content li:has(.os-av.u-bot) .os-who { color: var(--sk-sub); }
 .skrzynka .os-auto {
   font-size: 10.5px;
   font-weight: 800;
-  color: var(--sk-lav);
-  border: 1px solid var(--sk-lav-line);
+  color: var(--sk-sub);
+  border: 1px solid var(--sk-line);
   border-radius: 999px;
   padding: 0 8px;
   margin-left: 4px;
@@ -277,8 +293,73 @@
 }
 .skrzynka .os-src code { background: transparent; padding: 0; font-size: 11px; color: var(--sk-sub); }
 
+/* ── Załączniki ── */
+/* Wiersz pliku pod treścią. Trzy stany renderu (inbox-pull.mjs): checkbox „Pobierz",
+   podgląd po pobraniu, oraz `os-att-gone` gdy bajty wygasły. Bez tych reguł span jest
+   goły i rozpycha wiersz — „Pobierz —" łamało się na dwie linie obok awatara. */
+.skrzynka .os-att {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--sk-sub);
+  background: var(--sk-pill);
+  border-radius: 999px;
+  padding: 2px 10px;
+  max-width: 100%;
+  /* nazwa pliku pochodzi od nadawcy — długa albo bez spacji nie może rozpychać kolumny */
+  overflow-wrap: anywhere;
+}
+
+/* Wiersz-akcja „Pobierz": etykieta i pigułka trzymają się jednej linii bazowej,
+   a łamanie następuje między nimi, nie w środku „Pobierz —". */
+.skrzynka .callout .callout-content li:has(.os-att) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Podgląd pobranego obrazka (wikilink po <br>) dostaje własną linię i wcięcie.
+   min-width: 0 — bez tego element flex przyjmuje szerokość treści i wypycha kartę poza ramkę. */
+.skrzynka .callout .callout-content li:has(.os-att) .internal-embed {
+  flex-basis: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 6px;
+}
+.skrzynka .callout .callout-content li:has(.os-att) .internal-embed img {
+  max-height: 220px;
+  width: auto;
+  border-radius: 8px;
+}
+.skrzynka .callout .callout-content li:has(.os-att) > a.internal-link {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Karta trzyma ramkę przy długiej treści: szerokie wnętrze (długi link, kod, tabela,
+   stary osadzony plik) łamie się albo przewija w sobie, zamiast przesuwać całą kartę w bok. */
+.skrzynka .callout { min-width: 0; max-width: 100%; overflow: hidden; }
+.skrzynka .callout .callout-content { min-width: 0; overflow-wrap: anywhere; }
+.skrzynka .callout .callout-content li,
+.skrzynka .callout .callout-content p { min-width: 0; }
+.skrzynka .callout .callout-content pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.skrzynka .callout .callout-content :is(table, .markdown-embed) { display: block; max-width: 100%; overflow-x: auto; }
+.skrzynka .callout .callout-content img { max-width: 100%; height: auto; }
+
+/* Stan wygasły — bajty skasowane przez retencję. Przygaszony i obwiedziony
+   przerywaną linią, żeby odróżniał się od pliku, który da się jeszcze pobrać. */
+.skrzynka .os-att.os-att-gone {
+  color: var(--sk-mute);
+  background: transparent;
+  border: 1px dashed var(--sk-line);
+  font-weight: 500;
+}
+
 /* ── Stopka — checkbox jako akcja ── */
-.skrzynka .callout .callout-content ul:has(.task-list-item) {
+.skrzynka .callout .callout-content ul:has(> li.task-list-item) {
   list-style: none !important;
   margin: 10px 0 0;
   padding: 10px 0 0 4px !important;
@@ -291,7 +372,7 @@
   gap: 10px;
   font-size: 13.5px;
   font-weight: 700;
-  color: var(--sk-sage);
+  color: var(--sk-ink);
 }
 /* AnuPpuccin przekreśla i koloruje taski po swojemu — twardy reset na Skrzynce */
 .skrzynka .callout .callout-content li.task-list-item,
@@ -308,9 +389,9 @@
   flex: none !important;
   width: 17px !important;
   height: 17px !important;
-  border: 2px solid var(--sk-sage) !important;
+  border: 2px solid var(--sk-mute) !important;
   border-radius: 6px !important;
-  background: var(--sk-sage-soft) !important;
+  background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
   margin: 0 !important;
@@ -323,13 +404,13 @@
   content: none !important;
 }
 .skrzynka .callout .task-list-item-checkbox:checked {
-  background: var(--sk-sage) !important;
-  border-color: var(--sk-sage) !important;
+  background: var(--sk-green) !important;
+  border-color: var(--sk-green) !important;
 }
 .skrzynka .callout .task-list-item-checkbox:checked::after {
   content: "✓" !important;
   display: block !important;
-  color: #2a2724;
+  color: #fff;
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
@@ -354,13 +435,12 @@
 .skrzynka .callout[data-callout="delegated"] {
   background: var(--sk-card);
   border: 1px solid var(--sk-line);
-  border-left: 4px solid var(--sk-honey);
+  border-left: 4px solid var(--sk-sub);
   border-radius: 16px;
   padding: 13px 16px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   mix-blend-mode: normal;
-  --callout-color: 240, 179, 80;
+  --callout-color: 163, 158, 148;
 }
 /* linia tytułu: tytuł po lewej, badge daty wysłania po prawej (przed chevronem folda) */
 .skrzynka .callout[data-callout="delegated"] .callout-title-inner {
@@ -396,21 +476,108 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.skrzynka .os-wait.stale { background: var(--sk-coral); color: #2a2724; }
+.skrzynka .os-wait.stale { background: var(--sk-orange); color: #fff; }
 
 /* ═══ STAN PUSTY — zielony spokój ═══ */
 .skrzynka .callout[data-callout="inbox-ok"] {
-  background: var(--sk-sage-soft);
-  border: 1px solid #3f5a4a;
+  background: var(--sk-card);
+  border: 1px solid var(--sk-line);
+  border-left: 4px solid var(--sk-green);
   border-radius: 16px;
   padding: 10px 18px;
   mix-blend-mode: normal;
-  --callout-color: 63, 158, 110;
+  --callout-color: 47, 158, 68;
 }
 /* jednolinijkowy stan pusty — Obsidian i tak tworzy pusty blok treści z paddingiem, chowamy */
 .skrzynka .callout[data-callout="inbox-ok"] .callout-content { display: none; }
 .skrzynka .callout[data-callout="inbox-ok"] .callout-title-inner {
   font-size: 14px;
   font-weight: 600;
-  color: var(--sk-sage);
+  color: var(--sk-ink);
+}
+
+
+/* ═══ v2 — poprawki po przeglądzie ═══ */
+
+/* Pigułka „wysłane DD.MM, HH:MM" — zawsze jedna linia i ta sama szerokość;
+   zawija się tytuł, nie data. */
+.skrzynka .callout[data-callout="delegated"] .callout-title-inner .os-since {
+  flex: none;
+  white-space: nowrap;
+  min-width: 138px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+
+/* Wątek: każda wiadomość to osobny dymek — widać, kto pisze, gdzie wiadomość
+   się zaczyna i kończy. Oś łącząca awatary niepotrzebna — chowamy. */
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item))::before,
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li:last-child::after {
+  display: none;
+}
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) {
+  padding-left: 0 !important;
+  margin: 10px 0 4px;
+}
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li {
+  background: rgba(242, 239, 232, 0.035);
+  border: 1px solid var(--sk-line);
+  border-radius: 4px 14px 14px 14px;
+  padding: 10px 14px 10px 50px;
+  margin: 0 0 8px;
+}
+/* awatar w dymku. Selektor potomny, nie `li > .os-av`: wiadomość z pustą linią
+   w treści Obsidian owija w <p>, a wtedy awatar nie jest bezpośrednim dzieckiem li. */
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li .os-av {
+  position: absolute !important;
+  left: 12px !important;
+  top: 10px !important;
+  box-shadow: none;
+  margin: 0;
+}
+/* moje wiadomości — jaśniejszy dymek z kremowym brzegiem, odsunięty w prawo */
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li:has(.os-av.me) {
+  background: rgba(242, 239, 232, 0.085);
+  border-color: rgba(242, 239, 232, 0.22);
+  border-radius: 14px 4px 14px 14px;
+  margin-left: 32px;
+}
+
+/* Załącznik w dymku („Pobierz") — to nie stopka wątku: bez przerywanej linii i wcięcia */
+.skrzynka .callout .callout-content li ul:has(> li.task-list-item) {
+  border-top: none;
+  margin: 8px 0 0;
+  padding: 0 !important;
+}
+.skrzynka .callout .callout-content li ul:has(> li.task-list-item)::before { display: none; }
+.skrzynka .callout .callout-content li li.task-list-item { font-size: 13px; font-weight: 600; color: var(--sk-sub); }
+
+/* v3 — wyrównanie wszystkiego w karcie wątku do jednej lewej krawędzi */
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 50px !important;
+  list-style: none;
+}
+.skrzynka .callout:is([data-callout="todo"], [data-callout="question"], [data-callout="tip"], [data-callout="note"]) .callout-content ul:not(:has(> li.task-list-item)) > li:has(.os-av.me) {
+  margin-inline-start: 32px !important;
+}
+/* akapity w dymku: bez dużych odstępów motywu (pusta linia w treści robiła dziurę) */
+.skrzynka .callout .callout-content ul:not(:has(> li.task-list-item)) > li p {
+  margin: 0 0 6px;
+}
+.skrzynka .callout .callout-content ul:not(:has(> li.task-list-item)) > li p:last-child { margin-bottom: 0; }
+/* „Pobierz" w dymku — równo z tekstem wiadomości, bez wcięcia motywu */
+.skrzynka .callout .callout-content li ul:has(> li.task-list-item) {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+}
+.skrzynka .callout .callout-content li ul > li.task-list-item {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+}
+/* stopka „Zrobione" — checkbox na tej samej krawędzi co dymki */
+.skrzynka .callout .callout-content > ul:has(> li.task-list-item) > li.task-list-item {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 12px !important;
 }

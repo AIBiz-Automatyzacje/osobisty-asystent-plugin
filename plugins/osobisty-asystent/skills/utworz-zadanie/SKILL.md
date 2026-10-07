@@ -1,121 +1,59 @@
 ---
 name: utworz-zadanie
-description: Tworzy nowe zadanie w systemie Obsidian. Użyj gdy user prosi o dodanie/utworzenie zadania, zapisanie czegoś do zrobienia, lub wspomina o task/todo.
-argument-hint: "[nazwa] | [priorytet] | [termin] | [projekt]"
-allowed-tools: ["Read", "Write", "Bash", "Edit", "Glob"]
+description: Dodaje zadanie do Dashboardu w Obsidianie (jedna linia — nazwa, priorytet, termin, opcjonalnie link do materiału). Użyj gdy user prosi o dodanie/utworzenie zadania, zapisanie czegoś do zrobienia, lub wspomina o task/todo.
+argument-hint: "[nazwa] | [priorytet] | [termin] | [link]"
+allowed-tools: ["Read", "Edit", "Write", "Bash", "Glob"]
 ---
 
 # Utwórz Zadanie
 
-Tworzysz nowe zadanie w systemie Obsidian.
+Zadanie = **jedna linia w `Zadania/Dashboard.md`**. Bez osobnego pliku, projektu i podzadań.
+Format linii i sekcji jest wspólny z `/daily` — patrz [config.md](config.md).
 
-## Workflow
+## 1. Parsuj argumenty
 
-### 1. Załaduj config
-
-Przeczytaj `config.md` w tym skillu - zawiera ścieżki, priorytety, projekty.
-
-### 2. Parsuj argumenty
-
-**Format:** `nazwa | priorytet | termin | projekt`
-
-Delimiter: `|` (przecinki mogą być w nazwach zadań)
+**Format:** `nazwa | priorytet | termin | link` — delimiter `|` (przecinki bywają w nazwach).
 
 Przykłady:
-- `Przygotowanie materiałów Make` → tylko nazwa
-- `Scenariusz live | pilne | 2026-01-14` → nazwa, priorytet, termin
-- `Refaktoryzacja kodu, logiki | wazne | brak | claude-infra` → pełne
+- `Oferta dla stolarni` → sama nazwa
+- `Zadzwoń do hurtowni | pilne | jutro`
+- `Przejrzyj raport narzędzi | normalne | dzisiaj | Zasoby/Raporty/2026-09-28-narzedzia.md`
 
-### 3. Uzupełnij brakujące
+**Braki uzupełnij bez pytania:** priorytet → `normalne`, termin → brak, link → brak.
+**Wyciągaj z kontekstu**, jeśli user wspomniał: „pilne/asap” → pilne, „ważne” → wazne,
+„na jutro / do piątku / 15.01” → termin (tabela w config.md). Dzisiejszą datę bierz z `date +%Y-%m-%d`.
 
-**Domyślne wartości** (NIE pytaj - użyj defaults):
-- priorytet → `normalne`
-- termin → brak (puste)
-- projekt → brak (puste)
+## 2. Link do materiału (opcjonalny)
 
-**Wyciągaj z kontekstu** jeśli user wspomniał:
-- "pilne", "ważne", "asap" → priorytet
-- "na jutro", "do piątku", "15.01" → termin
-- "do akademii", "claude", "osobiste" → projekt
+- Dostałeś ścieżkę do istniejącego pliku (raport, notatka, wpis) → wstaw ją jako link 📎.
+- User podał szczegóły, które trzeba zachować (kontakt, dane do faktury, kroki) i nie ma na nie
+  pliku → utwórz notatkę `Zadania/notatki/[nazwa-kebab-case].md` (nagłówek `# Nazwa` + treść
+  od usera, nic więcej) i podlinkuj ją 📎. Bez szczegółów — **żadnego pliku**.
 
-**Wyjątek - rodzic/podzadanie:**
-- NIE pytaj o rodzica
-- Tylko jeśli user SAM wspomni → wylistuj pliki w `w_trakcie/` i zapytaj
+## 3. Dopisz linię do Dashboardu
 
-### 4. Generuj nazwę pliku
+1. Przeczytaj `Zadania/Dashboard.md`.
+2. Wybierz sekcję wg terminu (tabela w config.md). Nagłówki dopasowuj **po tekście, ignorując emoji** —
+   sekcja „Dzisiaj” ma w nagłówku zmienną datę (`## Dzisiaj, piątek 17.04`), dzień z okna tygodnia to
+   `## Wtorek 29.09` (dopasuj po dacie). Stary Dashboard (sprzed `/daily`) może mieć jeszcze
+   `## 📅 Ten tydzień` — wtedy wstaw tam. Brak sekcji w pliku → dopisz ją w kolejności z config.md.
+   Pod nagłówkiem dnia stoi `_brak zadań_` → **zastąp** tę linię nowym zadaniem.
+3. Sformatuj linię (config.md → „Format linii”) i wstaw ją w sekcji wg sortowania: termin rosnąco,
+   potem priorytet. Wpisy cykliczne 🔁 zostaw w spokoju.
+4. Zaktualizuj `ostatnia_aktualizacja` we frontmatterze (`YYYY-MM-DD HH:MM`).
+5. Zapisuj **narzędziem Edit** (jedna zmiana w pliku), nie przez Bash — niektóre hooki blokują zapis `.md` przez Bash.
 
-Kebab-case:
-- Spacje → myślniki
-- Usuń polskie znaki (ą→a, ę→e, ć→c, ł→l, ń→n, ó→o, ś→s, ź→z, ż→z)
-- Lowercase, usuń znaki specjalne
+**Termin w przeszłości** → wstaw do „Zaległe” i ostrzeż: „⚠️ Termin DD.MM już minął.” (nie blokuj).
+**Ta sama nazwa już jest w Dashboardzie** (niewykonana) → nie dubluj, powiedz o tym.
 
-**Wpisy/posty:** "wpis na dzisiaj" → "Wpis DD.MM" (data w nazwie)
+## 4. Potwierdzenie
 
-**Podzadania:** prefiks `_` → `_nazwa-zadania.md`
-
-### 5. Utwórz plik
-
-1. Przeczytaj szablon — **najpierw** spróbuj `Zadania/.szablony/szablon-zadania.md` w workspace. Jeśli plik nie istnieje (świeży workspace bez konfigu), użyj fallbacku `{baseDir}/templates/szablon-zadania.md`.
-2. Uzupełnij frontmatter:
-   ```yaml
-   status: w_trakcie
-   priorytet: [priorytet]
-   termin: [YYYY-MM-DD lub puste]
-   utworzone: [dzisiaj YYYY-MM-DD]
-   projekt: [[Zadania/projekty/nazwa]] lub puste
-   rodzic: [[w_trakcie/nazwa]] lub puste
-   ```
-3. Zamień `# [Nazwa zadania]` na właściwą nazwę
-4. Zamień `*Utworzono: YYYY-MM-DD*` na dzisiaj
-5. Zapisz do `Zadania/w_trakcie/[nazwa].md`
-
-**Edge case - termin w przeszłości:**
-→ Ostrzeżenie: "⚠️ Termin [data] jest w przeszłości." (nie blokuj)
-
-**Edge case - plik istnieje:**
-→ Dodaj suffix: `-2`, `-3`, etc.
-
-### 6. Notatka dla wpisu/postu (opcjonalnie)
-
-Jeśli zadanie dotyczy wpisu (słowa: wpis, post, content, publikacja + data):
-
-1. Sprawdź/utwórz folder `Marketing/wpisy/YYYY/`
-2. Jeśli `Marketing/wpisy/YYYY/YYYY-MM-DD.md` nie istnieje → utwórz pusty
-3. W zadaniu dodaj: `#### Content\n[[Marketing/wpisy/YYYY/YYYY-MM-DD]]`
-
-### 7. Dodaj do dashboardu
-
-1. Przeczytaj `Zadania/Dashboard.md` *(u starszych instalacji: `Zadania/to_do.md` — użyj tego, który istnieje)*
-2. Określ sekcję:
-   - **DZISIAJ** → termin = dzisiaj
-   - **TEN TYDZIEŃ** → termin 1-7 dni
-   - **PÓŹNIEJ** → termin > 7 dni
-   - **BEZ TERMINU** → brak terminu
-3. Sformatuj wpis:
-   ```
-   - [ ] [[w_trakcie/nazwa|Tytuł]] - 🔴 pilne - DD.MM
-   ```
-   Podzadanie: `[[w_trakcie/nazwa|↳ Tytuł]]`
-4. Dodaj do sekcji (sortuj: termin → priorytet)
-5. Zaktualizuj `ostatnia_aktualizacja` w frontmatter
-
-### 8. Potwierdzenie
-
-```
-✅ Zadanie utworzone!
-
-📄 Plik: Zadania/w_trakcie/[nazwa].md
-📊 Priorytet: [priorytet]
-📅 Termin: [DD.MM.YYYY lub brak]
-📁 Projekt: [projekt lub brak]
-👆 Rodzic: [rodzic] (jeśli podzadanie)
-📝 Notatka: Marketing/wpisy/... (jeśli wpis)
-```
+Jedna linia: `✅ Dodane: [nazwa] — [emoji] · [DD.MM lub „bez terminu”] → sekcja [nazwa sekcji]`
+(+ ścieżka notatki, jeśli powstała).
 
 ## Constraints
 
-- NIE twórz bez nazwy
-- NIE nadpisuj istniejących plików
-- ZAWSZE dodaj do Dashboard.md (u starszych instalacji: to_do.md)
-- ZAWSZE ISO format w frontmatter (YYYY-MM-DD)
-- Projekt: link `[[Zadania/projekty/nazwa]]` lub PUSTE (nigdy tekst "brak")
+- NIE twórz zadania bez nazwy
+- NIE twórz plików zadań w `Zadania/w_trakcie/` — ten folder nie jest już używany
+- Notatka w `Zadania/notatki/` tylko przy realnych szczegółach od usera
+- Po odhaczeniu `[x]` archiwizację robi `/daily`, nie ten skill

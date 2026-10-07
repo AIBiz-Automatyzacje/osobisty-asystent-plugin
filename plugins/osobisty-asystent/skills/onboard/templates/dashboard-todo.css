@@ -1,168 +1,78 @@
 /* ═══════════════════════════════════════════════════════════════
-   Dashboard zadań (Dashboard.md; starsze instalacje: to_do.md) — Team OS (redesign 07.2026, ciepły grafit)
+   Dashboard zadań — Team OS (redesign 09.2026, „tusz": barwy AA na tle vaulta)
    Aktywny tylko na stronach z `cssclasses: dashboard-todo`.
-   Czysty CSS na markdown: callouty [!inbox]/[!delegated]/[!inbox-ok]
-   generuje inbox-pull (Puls), nagłówki H2 z emoji generuje /daily.
+   Callouty [!inbox]/[!delegated]/[!inbox-ok] generuje inbox-pull (Puls),
+   nagłówki H2 generuje /daily. Sekcje rozpoznawane po TEKŚCIE nagłówka
+   (`*=`), więc działa i dla starych nagłówków z emoji, i dla nowych bez:
+   Zaległe · Dzisiaj · Poniedziałek…Piątek · Później · Bez terminu.
+   Tydzień (Dzisiaj → dni do piątku) = oś z kropkami po lewej.
+   Pomarańcz AA #E8590C = wyłącznie „po terminie" (Zaległe).
+   Para: skrzynka.css (ta sama paleta).
    ═══════════════════════════════════════════════════════════════ */
 
 .dashboard-todo {
-  --dt-bg: #2a2724;
-  --dt-card: #35322d;
-  --dt-line: #47433c;
-  --dt-ink: #f0eadd;
-  --dt-sub: #b3aa99;
-  --dt-mute: #7e776b;
-  --dt-coral: #ff8a70;
-  --dt-coral-soft: #35322d;
-  --dt-coral-line: #6b4a41;
-  --dt-honey: #f0b350;
-  --dt-honey-soft: #35322d;
-  --dt-honey-line: #66573a;
-  --dt-sage: #6cc795;
-  --dt-sage-soft: #333a34;
-  --dt-sky: #7db4ea;
-  --dt-lav: #b3a5f5;
-  --dt-pill: #423e37;
-}
-
-/* ── Tło strony — ciepły grafit, spójny z ciemnym motywem vaulta ── */
-.markdown-preview-view.dashboard-todo,
-.markdown-source-view.dashboard-todo .cm-scroller {
-  background: var(--dt-bg);
-  color: var(--dt-ink);
+  --dk-ink: #F2EFE8;
+  --dk-sub: #A39E94;
+  --dk-mute: #6F6B64;
+  --dk-card: rgba(242, 239, 232, 0.045);
+  --dk-card-today: rgba(242, 239, 232, 0.075);
+  --dk-line: rgba(242, 239, 232, 0.10);
+  --dk-line-soft: rgba(242, 239, 232, 0.06);
+  --dk-rail: rgba(242, 239, 232, 0.14);
+  --dk-orange: #E8590C;
+  /* pomarańcz AA = wyłącznie „po terminie" (Zaległe); reszta w tuszu i szarości */
+  --dk-green: #2F9E44;
+  --italic-color: var(--dk-mute);
 }
 .dashboard-todo .markdown-preview-sizer { max-width: 780px; }
 
-.markdown-preview-view.dashboard-todo a.internal-link,
-.markdown-preview-view.dashboard-todo a {
-  color: var(--dt-sky);
-  font-weight: 600;
-  text-decoration: none;
+/* ═══ PAPIER: kratka jak w zeszycie + delikatne ziarno, na kolorze tła motywu ═══
+   Kratka 32 px jak na stronie AA, tylko kremowa i ledwo widoczna.
+   `local` — kratka przewija się razem z treścią, jak prawdziwa kartka. */
+.markdown-preview-view.dashboard-todo {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.93 0 0 0 0 0.9 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(rgba(242, 239, 232, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 239, 232, 0.028) 1px, transparent 1px);
+  background-size: 160px 160px, 32px 32px, 32px 32px;
+  background-attachment: local;
 }
 
-.markdown-preview-view.dashboard-todo h1 {
-  color: var(--dt-ink);
-  letter-spacing: -0.02em;
+/* właściwości (frontmatter) ukryte w obu trybach — !important, bo reguły
+   Obsidiana dla trybu edycji (.is-live-preview) mają wyższą specyficzność */
+.markdown-preview-view.dashboard-todo .metadata-container,
+.markdown-source-view.dashboard-todo .metadata-container,
+.markdown-source-view.is-live-preview.dashboard-todo .metadata-container {
+  display: none !important;
+}
+
+/* H1 „Dashboard" dubluje tytuł notatki — chowamy */
+.markdown-preview-view.dashboard-todo .el-h1 { display: none; }
+
+.markdown-preview-view.dashboard-todo a,
+.markdown-preview-view.dashboard-todo a.internal-link {
+  color: var(--dk-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--dk-sub);
+  text-underline-offset: 3px;
 }
 
 /* ═══ CALLOUTY SKRZYNKI ═══ */
 .dashboard-todo .callout[data-callout="inbox"],
 .dashboard-todo .callout[data-callout="delegated"],
 .dashboard-todo .callout[data-callout="inbox-ok"] {
+  background: var(--dk-card);
+  border: 1px solid var(--dk-line);
   border-radius: 16px;
   padding: 14px 18px;
-  border: 1px solid;
-  background-blend-mode: normal;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
   mix-blend-mode: normal;
 }
-.dashboard-todo .callout[data-callout="inbox"] {
-  background: var(--dt-coral-soft);
-  border-color: var(--dt-coral-line);
-  border-left: 4px solid var(--dt-coral);
-  --callout-color: 226, 84, 63;
-}
-.dashboard-todo .callout[data-callout="delegated"] {
-  background: var(--dt-honey-soft);
-  border-color: var(--dt-honey-line);
-  border-left: 4px solid var(--dt-honey);
-  --callout-color: 192, 127, 22;
-}
-.dashboard-todo .callout[data-callout="inbox-ok"] {
-  background: var(--dt-sage-soft);
-  border-color: #3f5a4a;
-  --callout-color: 63, 158, 110;
-}
+.dashboard-todo .callout[data-callout="inbox"] { border-left: 4px solid var(--dk-ink); --callout-color: 242, 239, 232; }
+.dashboard-todo .callout[data-callout="delegated"] { border-left: 4px solid var(--dk-sub); --callout-color: 163, 158, 148; }
+.dashboard-todo .callout[data-callout="inbox-ok"] { border-left: 4px solid var(--dk-green); --callout-color: 47, 158, 68; }
 
-/* tytuł calloutu: bez domyślnej ikony (mamy emoji), większy, kolor typu */
-.dashboard-todo .callout[data-callout="inbox"] .callout-icon,
-.dashboard-todo .callout[data-callout="delegated"] .callout-icon,
-.dashboard-todo .callout[data-callout="inbox-ok"] .callout-icon { display: none; }
-.dashboard-todo .callout .callout-title-inner {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--dt-ink);
-}
-.dashboard-todo .callout[data-callout="inbox"] .callout-title-inner strong { color: var(--dt-coral); }
-.dashboard-todo .callout[data-callout="delegated"] .callout-title-inner strong { color: var(--dt-honey); }
-.dashboard-todo .callout[data-callout="inbox-ok"] .callout-title-inner { color: var(--dt-sage); font-weight: 600; }
-
-/* lista wiadomości w callout — oddechy i przerywane linie */
-.dashboard-todo .callout .callout-content ul {
-  margin: 6px 0 0;
-  padding-left: 4px;
-  list-style: none;
-}
-.dashboard-todo .callout .callout-content li {
-  padding: 6px 0;
-  color: var(--dt-ink);
-}
-.dashboard-todo .callout[data-callout="inbox"] .callout-content li + li { border-top: 1px dashed var(--dt-coral-line); }
-.dashboard-todo .callout[data-callout="delegated"] .callout-content li + li { border-top: 1px dashed var(--dt-honey-line); }
-.dashboard-todo .callout .callout-content li strong { font-weight: 700; }
-
-/* ═══ SEKCJE ZADAŃ — H2 jako etykieta + lista jako karta ═══ */
-.dashboard-todo .el-h2 h2 {
-  font-size: 16.5px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  border: none;
-  margin: 26px 0 8px;
-}
-.dashboard-todo .el-h2:has(h2[data-heading^="🔥"]) h2 { color: var(--dt-coral); }
-.dashboard-todo .el-h2:has(h2[data-heading^="☀️"]) h2 { color: var(--dt-lav); }
-.dashboard-todo .el-h2:has(h2[data-heading^="🌤️"]) h2 { color: var(--dt-sky); }
-.dashboard-todo .el-h2:has(h2[data-heading^="📅"]) h2 { color: var(--dt-sky); }
-.dashboard-todo .el-h2:has(h2[data-heading^="🌙"]) h2 { color: var(--dt-mute); }
-.dashboard-todo .el-h2:has(h2[data-heading^="🗂️"]) h2 { color: var(--dt-mute); }
-
-/* lista pod H2 = karta */
-.dashboard-todo .el-h2 + .el-ul > ul {
-  background: var(--dt-card);
-  border: 1px solid var(--dt-line);
-  border-radius: 16px;
-  padding: 6px 16px;
-  margin: 0 0 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  list-style: none;
-}
-.dashboard-todo .el-h2:has(h2[data-heading^="🔥"]) + .el-ul > ul { border-left: 4px solid var(--dt-coral); }
-.dashboard-todo .el-h2:has(h2[data-heading^="☀️"]) + .el-ul > ul { border-left: 4px solid var(--dt-lav); }
-
-/* wiersze zadań */
-.dashboard-todo .el-ul > ul > li.task-list-item {
-  padding: 7px 2px;
-  color: var(--dt-ink);
-}
-.dashboard-todo .el-ul > ul > li.task-list-item + li.task-list-item {
-  border-top: 1px solid color-mix(in srgb, var(--dt-line) 55%, transparent);
-}
-
-/* checkbox — większy, zaokrąglony, ciepły */
-.dashboard-todo .task-list-item-checkbox {
-  width: 17px;
-  height: 17px;
-  border: 2px solid var(--dt-mute);
-  border-radius: 6px;
-  background: var(--dt-card);
-}
-.dashboard-todo .task-list-item-checkbox:checked {
-  background-color: var(--dt-sage);
-  border-color: var(--dt-sage);
-}
-
-/* zrobione — gasną i się przekreślają */
-.dashboard-todo li.task-list-item.is-checked {
-  opacity: 0.45;
-  text-decoration: line-through;
-  color: var(--dt-sub);
-}
-.dashboard-todo li.task-list-item.is-checked a.internal-link { color: var(--dt-sub); font-weight: 500; }
-
-/* frontmatter/properties — schowaj tabelkę właściwości na dashboardzie */
-.markdown-preview-view.dashboard-todo .metadata-container { display: none; }
-
-/* AnuPpuccin podbija tło tytułu calloutu — na dashboardzie wyłączamy (twardo, bo motyw celuje wyższą specyficznością) */
+.dashboard-todo .callout .callout-icon { display: none; }
 .dashboard-todo .callout .callout-title,
 .dashboard-todo .callout .callout-title-inner,
 .dashboard-todo .callout[data-callout] .callout-title {
@@ -170,11 +80,193 @@
   background-color: transparent !important;
   padding: 0;
 }
+.dashboard-todo .callout .callout-title-inner { font-size: 15px; font-weight: 600; color: var(--dk-ink); }
+.dashboard-todo .callout[data-callout="inbox"] .callout-title-inner strong { color: var(--dk-ink); font-weight: 700; }
+.dashboard-todo .callout[data-callout="inbox-ok"] .callout-title-inner { color: var(--dk-green); }
 
-/* H1 dashboardu — spokojniejszy, bez twardej linii motywu */
-.markdown-preview-view.dashboard-todo h1 {
-  font-size: 20px;
-  color: var(--dt-sub);
-  border-bottom: none;
-  margin-bottom: 6px;
+.dashboard-todo .callout .callout-content ul { margin: 6px 0 0; padding-left: 4px; list-style: none; }
+.dashboard-todo .callout .callout-content li { padding: 6px 0; color: var(--dk-ink); }
+.dashboard-todo .callout .callout-content li::marker { content: none; }
+.dashboard-todo .callout .callout-content li strong { color: var(--dk-ink); font-weight: 600; }
+.dashboard-todo .callout .callout-content li + li { border-top: 1px dashed var(--dk-line); }
+/* bez kropek-punktorów motywu w banerach */
+.dashboard-todo .callout .callout-content .list-bullet { display: none; }
+.dashboard-todo .callout .callout-content ul { padding-inline-start: 0; }
+.dashboard-todo .callout .callout-content li { margin-inline-start: 0; padding-inline-start: 0; }
+
+/* banery to jedna grupa „od zespołu" — ciasno między sobą */
+.dashboard-todo .callout[data-callout="inbox"],
+.dashboard-todo .callout[data-callout="delegated"],
+.dashboard-todo .callout[data-callout="inbox-ok"] {
+  margin: 0 0 10px;
 }
+
+/* granica: banery zespołu | moje zadania — linia i oddech przed „Zaległe" */
+.dashboard-todo .el-h2:has(h2[data-heading*="Zaległe"]) {
+  margin-top: 14px;
+  border-top: 1px solid var(--dk-line);
+}
+.dashboard-todo .el-h2:has(h2[data-heading*="Zaległe"]) h2 { margin-top: 16px; }
+
+/* ═══ NAGŁÓWKI SEKCJI ═══ */
+.dashboard-todo .el-h2 h2 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--dk-ink);
+  border: none;
+  margin: 28px 0 8px;
+}
+.dashboard-todo .el-h2:has(h2[data-heading*="Zaległe"]) h2 { color: var(--dk-orange); }
+.dashboard-todo .el-h2:has(h2[data-heading*="Później"]) h2,
+.dashboard-todo .el-h2:has(h2[data-heading*="Bez terminu"]) h2 { color: var(--dk-sub); font-weight: 600; }
+
+/* ═══ KARTY ZADAŃ (lista pod nagłówkiem) ═══ */
+.dashboard-todo .el-h2 + .el-ul > ul {
+  background: var(--dk-card);
+  border: 1px solid var(--dk-line);
+  border-radius: 16px;
+  padding: 4px 16px;
+  margin: 0 0 6px;
+  list-style: none;
+}
+.dashboard-todo .el-h2:has(h2[data-heading*="Zaległe"]) + .el-ul > ul { border-left: 4px solid var(--dk-orange); }
+.dashboard-todo .el-h2:has(h2[data-heading*="Dzisiaj"]) + .el-ul > ul {
+  background: var(--dk-card-today);
+  border-color: rgba(242, 239, 232, 0.35);
+}
+.dashboard-todo .el-h2:has(h2[data-heading*="Później"]) + .el-ul > ul,
+.dashboard-todo .el-h2:has(h2[data-heading*="Bez terminu"]) + .el-ul > ul {
+  background: transparent;
+  border-style: dashed;
+}
+
+/* ═══ OŚ TYGODNIA: Dzisiaj → Piątek ═══
+   Każdy blok dnia (nagłówek + karta albo „brak zadań") dostaje wcięcie
+   i pionową kreskę; na nagłówku kropka. Bloki leżą jeden pod drugim,
+   więc kreski składają się w jedną oś. */
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+),
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+) + :is(.el-ul, .el-p) {
+  position: relative;
+  padding-left: 28px;
+  display: flow-root; /* marginesy h2/ul zostają w bloku — inaczej oś ma dziury */
+}
+/* kreska osi */
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+)::before,
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+) + :is(.el-ul, .el-p)::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--dk-rail);
+}
+/* oś zaczyna się na kropce „Dzisiaj", nie nad nią */
+.dashboard-todo .el-h2:has(h2[data-heading*="Dzisiaj"])::before { top: 39px; }
+/* ostatni dzień (Piątek): kreska kończy się na karcie */
+.dashboard-todo .el-h2:has(h2[data-heading*="Piątek"]) + :is(.el-ul, .el-p)::before { bottom: 50%; }
+
+/* kropka dnia */
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+) h2 { position: relative; }
+.dashboard-todo :is(
+  .el-h2:has(h2[data-heading*="Dzisiaj"]),
+  .el-h2:has(h2[data-heading*="Poniedziałek"]),
+  .el-h2:has(h2[data-heading*="Wtorek"]),
+  .el-h2:has(h2[data-heading*="Środa"]),
+  .el-h2:has(h2[data-heading*="Czwartek"]),
+  .el-h2:has(h2[data-heading*="Piątek"])
+) h2::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 2px solid var(--dk-sub);
+  background: var(--background-primary);
+  z-index: 1;
+}
+/* dziś = pełna kropka z poświatą tła, wyraźnie „tu jesteś" */
+.dashboard-todo .el-h2:has(h2[data-heading*="Dzisiaj"]) h2::before {
+  background: var(--dk-ink);
+  border-color: var(--dk-ink);
+  box-shadow: 0 0 0 4px rgba(242, 239, 232, 0.12);
+}
+
+/* pusty dzień: sam cichy tekst przy osi */
+.dashboard-todo .el-h2 + .el-p > p:has(> em:only-child) {
+  margin: 0 0 6px;
+  padding: 2px 0 8px;
+  color: var(--dk-mute);
+  font-size: 13.5px;
+}
+/* dni z pustą listą — nagłówek też przygaszony */
+.dashboard-todo .el-h2:has(+ .el-p > p > em:only-child) h2 { color: var(--dk-sub); font-weight: 600; }
+
+/* ═══ WIERSZE ZADAŃ ═══ */
+.dashboard-todo .el-ul > ul > li.task-list-item {
+  padding: 9px 2px;
+  color: var(--dk-ink);
+  font-weight: 500;
+}
+.dashboard-todo .el-ul > ul > li.task-list-item + li.task-list-item {
+  border-top: 1px solid var(--dk-line-soft);
+}
+
+/* checkbox — jak w obecnym Dashboardzie */
+.dashboard-todo .task-list-item-checkbox {
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--dk-mute);
+  border-radius: 6px;
+  background: transparent;
+}
+.dashboard-todo .task-list-item-checkbox:checked {
+  background-color: var(--dk-green);
+  border-color: var(--dk-green);
+}
+
+.dashboard-todo li.task-list-item.is-checked {
+  opacity: 0.45;
+  text-decoration: line-through;
+  color: var(--dk-sub);
+}
+.dashboard-todo li.task-list-item.is-checked a.internal-link { color: var(--dk-sub); font-weight: 500; }

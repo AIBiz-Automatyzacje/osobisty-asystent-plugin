@@ -2,20 +2,20 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "osobisty-asystent",
   "displayName": "Osobisty Asystent AI",
-  "description": "Zbuduj własnego osobistego asystenta AI w Obsidian + Claude Code. Wizard onboarding tworzy Twój profil i system zadań, a skille (daily, reflect, memory-update, utworz-zadanie) prowadzą codzienną pracę. Zaawansowany skill zdalna-sesja daje dostęp do asystenta na serwerze (VPS) z telefonu.",
+  "description": "Zbuduj własnego osobistego asystenta AI w Obsidian + Claude Code. Wizard /onboard tworzy Twój profil i listę zadań, a skille (daily, utworz-zadanie, memory-update, reflect, skill-scout) prowadzą codzienną pracę. Zaawansowane: zdalna-sesja (asystent na VPS z telefonu), deleguj i plugin-zespolowy (Team OS).",
   "author": {
     "name": "AIBIZ Sp. z o.o.",
     "email": "kontakt@akademiaautomatyzacji.com",
     "url": "https://akademiaautomatyzacji.com"
   },
   "homepage": "https://akademiaautomatyzacji.com",
-  "keywords": ["obsidian", "claude-code", "personal-os", "asystent-ai", "onboarding", "automatyzacja"],
-  "license": "UNLICENSED",
-  "userConfig": {
-    "gog_account": {
-      "type": "string",
-      "title": "Adres e-mail Google (opcjonalny)",
-      "description": "Adres Google dla skilla daily (podgląd kalendarza w porannym raporcie). Zostaw puste, jeśli nie chcesz podłączać kalendarza — daily zadziała bez niego."
-    }
-  }
+  "keywords": [
+    "obsidian",
+    "claude-code",
+    "personal-os",
+    "asystent-ai",
+    "onboarding",
+    "automatyzacja"
+  ],
+  "license": "UNLICENSED"
 }

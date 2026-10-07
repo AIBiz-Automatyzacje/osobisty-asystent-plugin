@@ -13,7 +13,8 @@ Na podstawie odpowiedzi z wywiadu (kroki 2-6) wygeneruj plik w poniższej strukt
 
 | Pole | Wartość |
 |------|---------|
-| Imię i nazwisko | ... |
+| Imię | ... |
+| Forma zwracania się | żeńska / męska / neutralna — asystent pisze do usera WYŁĄCZNIE w tej formie |
 | Firma / Projekt | ... |
 | Rola | ... |
 | Język komunikacji | ... |
@@ -22,7 +23,8 @@ Na podstawie odpowiedzi z wywiadu (kroki 2-6) wygeneruj plik w poniższej strukt
 
 ## 2. TŁO ZAWODOWE
 
-[Skąd, dokąd, co po drodze — narracyjnie, nie punktowo]
+[Czym się zajmuje teraz; wcześniejsza droga tylko jeśli user ją podał (dopytanie w kroku 2
+jest opcjonalne) — narracyjnie, nie punktowo]
 
 ---
 
@@ -54,9 +56,9 @@ Na podstawie odpowiedzi z wywiadu (kroki 2-6) wygeneruj plik w poniższej strukt
 [Opis]
 
 ### Rytm i organizacja pracy
-[Bloki czasowe jeśli user je podał — kiedy zaczyna, kiedy deep work, kiedy przerwa.
-Ile godzin dziennie realnie pracuje. Kiedy ma najwięcej energii.
-Format tabeli jeśli ma wyraźne bloki, inaczej proza. Pomiń jeśli nie wspomniał.]
+[Dni i godziny pracy z kroku 4 (pkt 5) — np. „pon-pt 8:00-16:00”. Dodatkowo przerwy
+i pora największej energii, jeśli user o nich wspomniał. Format tabeli jeśli ma wyraźne
+bloki, inaczej jedno-dwa zdania.]
 
 ### Narzędzia
 [Lista]
@@ -68,9 +70,9 @@ Format tabeli jeśli ma wyraźne bloki, inaczej proza. Pomiń jeśli nie wspomni
 
 ## 6. BLOKERY I NAPIĘCIA
 
-[Frustracje, wady, sprzeczności — bez lukru. Co go drenuje w pracy,
-jakie ma blokery (perfekcjonizm? prokrastynacja? shiny object syndrome?
-za dużo zadań równolegle?). Bez owijania — to zostaje między userem a AI.]
+[Co zabiera energię i w czym asystent ma pomagać się pilnować — TYLKO z odpowiedzi
+usera (krok 6, pkt 2-3). Punkt 3 jest opcjonalny: jeśli user go pominął, zostaw tu wyłącznie
+to, co zabiera energię, bez dopisywania wad. Rzeczowo, bez oceniania.]
 
 ---
 
@@ -120,10 +122,13 @@ SAM wkleił wyniki jakiegoś testu — uwzględnij je tutaj jako dodatek, nie ja
 6. **Sekcja 7 ma być operacyjna** — konkretne "rób X / nie rób Y", nie ogólniki.
    To z niej AI realnie korzysta przy każdej interakcji.
 7. **Mapuj odpowiedzi na sekcje:**
+   - Krok 1 (imię + forma) → sekcja 1
    - Krok 2 (kim jesteś) → sekcja 1 + 2
    - Krok 3 (styl) → sekcja 3
-   - Krok 4 (wartości + narzędzia + projekty) → sekcja 4 + 5
+   - Krok 4 (wartości + narzędzia + projekty + dni i godziny pracy) → sekcja 4 + 5
    - Krok 5 (AI + frustracje) → sekcja 4 (stosunek do AI) + sekcja 7
-   - Krok 6 (motywatory, flow, blokery, rytm pracy) → sekcja 5 (rytm) + 6 + 8
+   - Krok 6 (satysfakcja, energia, opcjonalnie pilnowanie się) → sekcja 6 + 8
 8. **Język:** pisz w języku wywiadu (jeśli user mówi po polsku → persona po polsku)
 9. **Długość:** 80-200 linii — tyle ile wymaga treść, nie więcej
+10. **Forma rodzajowa:** całą personę pisz w formie wybranej w kroku 1 („lubi, gdy…”,
+    „jest zorientowana/zorientowany…”, neutralna = konstrukcje bezosobowe)

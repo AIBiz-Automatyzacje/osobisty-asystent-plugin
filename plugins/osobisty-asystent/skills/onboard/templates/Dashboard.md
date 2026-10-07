@@ -1,19 +1,17 @@
 ---
 ostatnia_aktualizacja: {{DATE}}
+cssclasses: dashboard-todo
 ---
 
-# TODO — Dashboard Zadań
+%% inbox:banner:start %%
+%% inbox:banner:end %%
 
-## ZALEGŁE
+# Dashboard
 
-## DZISIAJ
+## Zaległe
 
-## TEN TYDZIEŃ
+## Dzisiaj
 
-## PÓŹNIEJ
+## Później
 
-## BEZ TERMINU
-
----
-
-*Wygenerowano przez /onboard*
+## Bez terminu

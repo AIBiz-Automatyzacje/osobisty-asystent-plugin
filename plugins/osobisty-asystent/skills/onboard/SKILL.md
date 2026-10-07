@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Jednorazowy wizard setup Osobistego Asystenta AI — wywiad, generacja persona.md, soul.md, opcjonalnie biznes.md i content/voice-of-tone.md, zawsze content/ai-writing-patterns.md, struktura folderów, CLAUDE.md. Tryb --refresh-theme odświeża same snippety CSS (motyw Skrzynki i systemu zadań) na już skonfigurowanym systemie
+description: Jednorazowy wizard setup Osobistego Asystenta AI — imię i forma zwracania się, wywiad, generacja persona.md, soul.md, opcjonalnie biznes.md i content/voice-of-tone.md, zawsze content/ai-writing-patterns.md, struktura folderów, CLAUDE.md. Tryb --refresh-theme odświeża same snippety CSS (motyw Skrzynki i Dashboardu) na już skonfigurowanym systemie
 disable-model-invocation: true
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash", "AskUserQuestion"]
 ---
@@ -9,7 +9,8 @@ allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash", "AskUserQuestion"]
 
 Jednorazowy wizard, który prowadzi usera przez konfigurację Personal OS. Wywiad → generacja plików kontekstowych → struktura folderów → CLAUDE.md.
 
-**Czas:** ~15-20 minut
+**Czas:** ~10-15 minut
+**Dla kogo:** każdy, także osoba nietechniczna — pytania i przykłady nie zakładają programowania ani tworzenia treści
 **Wynik:** persona.md, soul.md, opcjonalnie biznes.md, CLAUDE.md, struktura folderów
 
 ---
@@ -85,7 +86,7 @@ echo "NODE: $NODE ($NODE_VER)"
 2. Zapisz wynik do `.claude/rules/environment.md` (utwórz folder jeśli trzeba):
 
 ```markdown
-# Środowisko — wykryte przez /onboarding ([dzisiejsza data YYYY-MM-DD])
+# Środowisko — wykryte przez /onboard ([dzisiejsza data YYYY-MM-DD])
 
 - **System:** [OS]
 - **Python:** `[pełna ścieżka]` ([wersja]) — do skryptów używaj TEJ ścieżki
@@ -103,22 +104,41 @@ Jeśli OS = Windows, dopisz na końcu:
 
 ---
 
-## KROK 1: POWITANIE
+## KROK 1: POWITANIE + IMIĘ I FORMA
 
 Wyświetl tekst (NIE AskUserQuestion — to intro):
 
 ```
-👋 Cześć! Zaraz skonfigurujemy Twojego AI pod Ciebie.
+👋 Cześć! Zaraz ustawimy Twojego asystenta AI pod Ciebie.
 
 Co się stanie:
-1. Pogadamy — poznam Cię (kilka pytań, ~15-20 min)
-2. Wygeneruję persona.md — Twój profil, który AI czyta na starcie
-3. Wygeneruję soul.md — osobowość AI dopasowaną do Ciebie
-4. Postawię strukturę folderów i system zadań
-5. Wygeneruję CLAUDE.md — "mózg" systemu
+1. Pogadamy — kilka pytań o Ciebie i Twoją pracę (~10-15 min)
+2. Zapiszę Twój profil (persona.md) — asystent czyta go na start każdej rozmowy
+3. Zapiszę charakter asystenta (soul.md) — jak ma z Tobą rozmawiać
+4. Założę foldery i listę zadań w Obsidianie
+5. Zapiszę CLAUDE.md — mapę całego systemu
 
-Na końcu będziesz mieć działający Personal OS. Lecimy 🚀
+Nie ma złych odpowiedzi, a wszystko da się potem poprawić. Zaczynamy 🚀
 ```
+
+**Potem pytanie otwarte** (zwykły tekst):
+
+> Jak masz na imię?
+
+Czekaj na odpowiedź. Potem **AskUserQuestion — 2 pytania:**
+
+| # | Pytanie | Header | Opcje (label · description) |
+|---|---------|--------|-----------------------------|
+| 1 | [Imię], w jakiej formie mam się do Ciebie zwracać? | Forma | **Żeńska** · „zrobiłaś”, „jesteś gotowa” · **Męska** · „zrobiłeś”, „jesteś gotowy” · **Neutralna** · bez form rodzajowych („udało się”, „gotowe”) |
+| 2 | A jak asystent ma mówić o sobie? | Asystent | **Męski** · „zrobiłem”, „sprawdziłem” · **Żeński** · „zrobiłam”, „sprawdziłam” · **Neutralny** · bez form rodzajowych („gotowe”, „sprawdzone”) |
+
+`multiSelect: false`
+
+**Od tej chwili WSZYSTKIE pytania i komunikaty wizardu piszesz w wybranej formie** — także
+teksty pytań z tego pliku, które są zapisane bezosobowo lub w formie przykładowej (przerób je
+w locie), a o sobie mówisz w rodzaju z pytania 2. Form **nie zgaduj z imienia** — pytasz
+zawsze. Imię i formę zapisz do kontekstu: trafiają do persona.md (sekcja 1) i obowiązują
+asystenta w każdej rozmowie. Rodzaj asystenta trafia do soul.md (KROK 9).
 
 ---
 
@@ -126,10 +146,17 @@ Na końcu będziesz mieć działający Personal OS. Lecimy 🚀
 
 **Pytanie otwarte** (zwykły tekst, NIE AskUserQuestion — potrzebna rozbudowana odpowiedź):
 
-> Opowiedz o sobie — kim jesteś, czym się zajmujesz, jaka firma/projekt?
-> I skąd przyszedłeś zawodowo — chcę znać Twoją drogę, nie jednozdaniowiec.
+> Opowiedz o sobie — czym się zajmujesz, w jakiej firmie i na jakim stanowisku?
+> Co jest Twoim głównym zadaniem na co dzień?
 
-Czekaj na odpowiedź. Jeśli zbyt krótka → dopytaj: "Możesz rozwinąć? Co robiłeś wcześniej?"
+Czekaj na odpowiedź. Jeśli zbyt krótka → dopytaj o konkret („Możesz dać przykład typowego zadania?”).
+
+Potem **jedno opcjonalne dopytanie** (zwykły tekst):
+
+> Jeśli chcesz, dopisz, czym zajmowałaś/zajmowałeś się wcześniej zawodowo — pomaga to
+> asystentowi dobierać przykłady. Możesz też pominąć.
+
+(Formę w dopytaniu dopasuj do wyboru z kroku 1.) Pominięcie = sekcja „Tło zawodowe” w personie zostaje krótka.
 
 Zapisz odpowiedź do kontekstu (użyjesz w kroku 7).
 
@@ -159,11 +186,17 @@ Zapisz odpowiedzi do kontekstu.
 > Teraz kilka pytań o to jak pracujesz:
 >
 > 1. Jakie masz twarde zasady w pracy? Czego ZAWSZE się trzymasz?
+>    (np. „odpisuję klientom tego samego dnia”, „najpierw fakty, potem decyzja”)
 > 2. Czego NIGDY nie akceptujesz?
-> 3. Jakich narzędzi/technologii używasz na co dzień?
-> 4. Nad czym teraz pracujesz? Główne projekty?
+>    (np. „obiecywania rzeczy, których nie zrobimy”, „bałaganu w ustaleniach”)
+> 3. Z jakich programów i narzędzi korzystasz na co dzień?
+>    (np. Facebook, Messenger, Gmail, arkusze Google, Excel, Canva, CRM, telefon)
+> 4. Nad czym teraz pracujesz? Jakie są Twoje główne zadania lub projekty?
+> 5. W jakie dni i w jakich godzinach zwykle pracujesz?
+>    (np. „pon-pt 8:00-16:00”, „różnie, najczęściej popołudniami”)
 
 Jeśli odpowiedź ogólnikowa → dopytaj: "Możesz dać konkretny przykład?"
+Odpowiedź z punktu 5 trafia do persona.md (sekcja „Rytm i organizacja pracy”).
 
 Zapisz do kontekstu.
 
@@ -199,10 +232,15 @@ Zapisz do kontekstu.
 
 > Ostatnia runda — o Twoją energię:
 >
-> 1. Kiedy czujesz flow? Co Cię nakręca? (podaj min. 3 sytuacje)
-> 2. Co Cię drenuje? Co zabiera energię?
-> 3. Jakie masz wady/blokery? (perfekcjonizm? prokrastynacja? shiny object syndrome?)
->    — bądź szczery, to zostaje między Tobą a AI
+> 1. Przy jakiej pracy czas leci Ci najszybciej? Co daje Ci satysfakcję?
+>    (np. „domknięta sprzedaż”, „rozmowa z klientem”, „uporządkowana tabela”)
+> 2. Co zabiera Ci najwięcej energii?
+>    (np. „powtarzanie tego samego”, „chaos w wiadomościach”, „długie maile”)
+> 3. *(opcjonalnie)* Czy jest coś, w czym asystent ma Ci pomagać pilnować się?
+>    (np. „odkładam trudne telefony”, „gubię terminy”, „za długo poprawiam”) —
+>    możesz pominąć.
+
+Punkt 3 jest opcjonalny: pominięcie = sekcja „Blokery” w personie zostaje pusta. Nie naciskaj.
 
 **Potem AskUserQuestion — 1 pytanie:**
 
@@ -272,11 +310,17 @@ Wszystkie: `multiSelect: false`
 
 **Potem pytanie otwarte:**
 
-> Ostatnie pytanie: opisz swoimi słowami jakiego "charakteru" ma mieć Twoje AI.
+> Ostatnie pytanie: opisz swoimi słowami, jaki „charakter” ma mieć Twój asystent.
 >
-> Np. "jak kumpel developer z którym siedzisz do 2 w nocy nad projektem"
-> albo "jak senior mentor który nie oszczędza krytyki ale zawsze ma rozwiązanie"
-> albo cokolwiek innego — tu nie ma złej odpowiedzi.
+> Na przykład:
+> - „jak ogarnięta osoba z biura, która pilnuje terminów i przypomina o sprawach”
+> - „jak doświadczony handlowiec, który podpowiada, jak odpisać klientowi”
+> - „jak cierpliwy nauczyciel, który tłumaczy krok po kroku, bez trudnych słów”
+> - „jak redaktor, który poprawia moje teksty i mówi wprost, co jest słabe”
+> - „jak kolega z pracy, z którym można pogadać na luzie”
+> - „jak mentor, który nie oszczędza krytyki, ale zawsze ma rozwiązanie”
+>
+> Albo cokolwiek innego — tu nie ma złej odpowiedzi.
 
 **Generacja:**
 
@@ -311,14 +355,14 @@ user pisze content **I dostarczy próbki** — bez realnych tekstów byłby zmy�
 
 **Jeśli "Tak, ale później" lub "Nie tworzę treści":**
 Pomiń. Zapamiętaj, że voice-of-tone NIE powstał (potrzebne w kroku 12). Jeśli "później" →
-powiedz: *"Spoko — skille `/reflect` i `/x-weekly-analysis` zbudują go z czasem z Twoich tekstów."*
+powiedz: *"Spoko — skill `/reflect` zbuduje go z czasem z Twoich tekstów."*
 
 **NIEZALEŻNIE od odpowiedzi (zawsze, bez pytania):**
 Skopiuj `templates/ai-writing-patterns.md` z tego skilla do `.claude/rules/content/ai-writing-patterns.md`
 (`mkdir -p` na folder). To uniwersalny, statyczny dokument referencyjny (wzorce usuwania artefaktów AI
-z polskich tekstów) — NIE jest personalizowany i NIE zależy od voice-of-tone. Przyda się przy każdej
-pracy z tekstem (posty, maile, wpisy). *(Plik zasiewa też hook `seed-base-files` przy starcie sesji,
-gdyby onboarding był pomijany.)*
+z polskich tekstów) — NIE jest personalizowany i NIE zależy od voice-of-tone. Kopiuj 1:1, BEZ
+dopisywania frontmattera `paths` — ma ładować się zawsze (każdy mail i wiadomość to tekst dla odbiorcy).
+*(Plik zasiewa też hook `seed-base-files` przy starcie sesji, gdyby onboarding był pomijany.)*
 
 ---
 
@@ -329,13 +373,10 @@ gdyby onboarding był pomijany.)*
 ```
 Zadania/
 ├── Dashboard.md          ← skopiuj z templates/Dashboard.md, zamień {{DATE}} na dzisiejszą datę YYYY-MM-DD
-├── projekty/
-├── w_trakcie/
-├── zrobione/
-├── cykliczne/
-│   └── recurring.md      ← skopiuj z templates/recurring.md
-└── .szablony/
-    └── szablon-zadania.md  ← skopiuj z templates/szablon-zadania.md
+├── projekty/             ← notatki projektowe (nie zadania)
+├── zrobione/             ← archiwum odhaczonych (/daily dopisuje zrobione/YYYY-MM.md)
+└── cykliczne/
+    └── recurring.md      ← skopiuj z templates/recurring.md
 
 Zasoby/
 
@@ -346,7 +387,7 @@ Zasoby/
 
 Pliki template'ów: przeczytaj z folderu `templates/` w tym skillu i skopiuj do docelowych lokalizacji.
 
-**Snippety CSS (wygląd systemu zadań i Skrzynki Team OS):** po skopiowaniu obu plików do `.obsidian/snippets/`
+**Snippety CSS (wygląd systemu zadań):** po skopiowaniu obu plików do `.obsidian/snippets/`
 dopisz `"dashboard-todo"` i `"skrzynka"` do listy `enabledCssSnippets` w `.obsidian/appearance.json`
 (utwórz plik z `{"enabledCssSnippets": ["dashboard-todo", "skrzynka"]}`, jeśli nie istnieje).
 Jeśli plik już istnieje — **dopisz brakujące wpisy do istniejącej listy**, nie podmieniaj jej
@@ -354,11 +395,21 @@ Jeśli plik już istnieje — **dopisz brakujące wpisy do istniejącej listy**,
 listę: Ustawienia → Wygląd → Fragmenty CSS → ikona odświeżania.
 
 **⚠️ Wymagana wersja Obsidiana — sprawdź i powiedz userowi wprost.**
-Snippet `skrzynka.css` stoi na selektorze CSS `:has()`, który działa dopiero na silniku
-Chromium 105+. Na starszym Obsidianie karty Skrzynki renderują się jako surowe callouty —
-awatary na tekście, brak kart, checkbox przyklejony. To nie jest błąd snippetu i **nie
-naprawia się go przepisywaniem CSS** — lekarstwem jest aktualizacja Obsidiana
-(Ustawienia → Ogólne → Sprawdź aktualizacje; na Obsidianie ≥ 1.4 problem nie występuje).
+Snippet `skrzynka.css` stoi na selektorze CSS `:has()` (13 użyć), który działa dopiero
+na silniku Chromium 105+. Na starszym Obsidianie karty Skrzynki renderują się jako surowe
+callouty — awatary na tekście, brak kart, checkbox przyklejony. To nie jest błąd snippetu
+i **nie naprawia się go przepisywaniem CSS**: lekarstwem jest aktualizacja Obsidiana.
+
+1. Poproś usera o sprawdzenie: **Ustawienia → Ogólne → Sprawdź aktualizacje** (wersja aplikacji
+   jest w tym samym miejscu; na Obsidianie ≥ 1.4 problem nie występuje).
+2. Wypisz jedną linię śladu: `✅ Obsidian zaktualizowany — potwierdzone przez usera` albo
+   `⚠️ Obsidian nieaktualny — Skrzynka będzie wyglądać surowo do czasu aktualizacji`.
+3. Nie blokuj onboardingu — reszta systemu działa niezależnie od wersji.
+
+**Uwaga (Team OS):** markery `%% inbox:banner %%` w Dashboardzie i plik `Zadania/Skrzynka.md`
+obsługuje Puls (claude-cron) — Skrzynkę tworzy sam przy pierwszym runie joba inbox (self-heal),
+NIE twórz jej ręcznie. Bez Pulsa markery są niewidoczne w Obsidianie i niczemu nie przeszkadzają.
+Jak działa Skrzynka — patrz „Skrzynka Team OS — flow" na dole tego pliku.
 
 **AskUserQuestion — 1 pytanie, multiSelect:**
 
@@ -372,6 +423,19 @@ Utwórz wybrane:
 - `Brudnopis.md` → pusty plik z nagłówkiem `# Brudnopis`
 
 Zapamiętaj co zostało utworzone (potrzebne w kroku 12).
+
+**Voice-of-tone a `Marketing/`:** jeśli w kroku 9B powstał `.claude/rules/content/voice-of-tone.md`
+ORAZ user wybrał `Marketing/` → dopisz na początek pliku frontmatter:
+
+```yaml
+---
+paths:
+  - "Marketing/**/*"
+---
+```
+
+Wtedy styl pisania ładuje się sam tylko przy pracy w `Marketing/` (poza nim — na żądanie, patrz
+tabela on-demand w CLAUDE.md). Bez `Marketing/` plik zostaje bez frontmattera i ładuje się zawsze.
 
 ---
 
@@ -388,8 +452,8 @@ Zapamiętaj co zostało utworzone (potrzebne w kroku 12).
                     sesji — dzięki temu AI wie nad czym pracujesz
 /reflect          — odpal po sesji, AI analizuje rozmowę i kalibruje
                     Twoje pliki kontekstowe (persona.md, soul.md, voice-of-tone.md)
-/utworz-zadanie   — tworzy zadanie w systemie Obsidian z priorytetem,
-                    terminem i projektem
+/utworz-zadanie   — dopisuje zadanie do Dashboardu: nazwa, priorytet,
+                    termin (możesz też dopisać linię ręcznie)
 /skill-scout      — raz w tygodniu przegląda Twoje logi i wyławia powtarzalną
                     ręczną robotę, którą warto opakować w kolejny skill
 
@@ -414,8 +478,8 @@ materiał — możesz je doinstalować w dowolnym momencie.
 | `rules/environment.md` | Wykryte środowisko maszyny (OS, Python, node) | Zawsze |
 | `rules/NOW.md` | Bieżący kontekst pracy (tworzy i aktualizuje `/memory-update`) | Zawsze |
 | `rules/biznes.md` | Kontekst biznesowy (firma, branża, stack, platformy) | Zawsze |
-| `rules/content/voice-of-tone.md` | Styl pisania treści (posty, maile) | Przy pracy z contentem |
-| `rules/content/ai-writing-patterns.md` | Wzorce usuwania artefaktów AI z tekstów | Przy pracy z contentem |
+| `rules/content/voice-of-tone.md` | Styl pisania treści (posty, maile) | Przy pracy w `Marketing/**` (frontmatter `paths`); bez `Marketing/` — zawsze |
+| `rules/content/ai-writing-patterns.md` | Wzorce usuwania artefaktów AI z tekstów | Zawsze; stosowany przy self-checku gotowego tekstu |
 
 Wiersz NOW.md wpisuj ZAWSZE, nawet jeśli plik jeszcze nie istnieje —
 powstanie przy pierwszym `/memory-update`.
@@ -423,7 +487,24 @@ Pomiń wiersz `rules/biznes.md` jeśli user nie utworzył go w kroku 8.
 Pomiń `content/voice-of-tone.md` jeśli nie został utworzony w kroku 9B.
 Wiersz `content/ai-writing-patterns.md` wpisuj ZAWSZE (plik kopiowany bezwarunkowo w kroku 9B / seed hookiem).
 
-**{{SKILLS_LIST}}** — lista 4 skilli core:
+**{{ON_DEMAND}}** — akapit + tabela, co czytać jawnie (Read) w jakiej sytuacji:
+
+```
+`ai-writing-patterns.md` stosujesz na etapie self-checku gotowego draftu — wczytany jako wzór
+PRZED pisaniem podsuwa frazy, których ma pilnować.
+[TYLKO gdy voice-of-tone ma `paths`:] `rules/content/voice-of-tone.md` ładuje się sam przy pracy
+na ścieżkach `Marketing/**`; poza `Marketing/` wczytujesz go jawnie wg tabeli.
+
+| Sytuacja | Wczytaj (Read) |
+|----------|----------------|
+| Poprawiasz/piszesz JAKIKOLWIEK tekst użytkownika | `rules/content/ai-writing-patterns.md` (self-check draftu) |
+| Mail lub wiadomość do klienta/partnera | `rules/content/ai-writing-patterns.md` |
+| Post, wpis, reklama poza `Marketing/` [TYLKO gdy voice-of-tone ma `paths`] | + `rules/content/voice-of-tone.md` |
+```
+
+Nie ma voice-of-tone → pomiń zdanie i wiersz o nim.
+
+**{{SKILLS_LIST}}** — lista 5 skilli core:
 
 ```
 **Workflow / Zarządzanie:**
@@ -439,12 +520,10 @@ Wiersz `content/ai-writing-patterns.md` wpisuj ZAWSZE (plik kopiowany bezwarunko
 ```
 - `.claude/` - konfiguracja Claude Code
 - `Zadania/` - system zarządzania zadaniami
-  - `Dashboard.md` - główna lista zadań
-  - `projekty/` - aktywne projekty
-  - `w_trakcie/` - zadania w toku
-  - `zrobione/` - ukończone zadania
+  - `Dashboard.md` - lista zadań (jedno zadanie = jedna linia)
+  - `projekty/` - notatki projektowe
+  - `zrobione/` - archiwum wykonanych zadań (`YYYY-MM.md`)
   - `cykliczne/recurring.md` - zadania cykliczne
-  - `.szablony/szablon-zadania.md` - szablon zadania
 - `Zasoby/` - materiały zewnętrzne
 ```
 
@@ -458,10 +537,9 @@ Dodaj `Marketing/`, `Notatki/`, `Brudnopis.md` jeśli zostały wybrane w kroku 1
 
 ### System zadań
 
-- **Tworzenie zadań:** ZAWSZE używaj komendy `/utworz-zadanie` — nigdy nie twórz plików zadań ręcznie
-- **Nazwy zadań:** kebab-case (np. `moje-nowe-zadanie.md`)
-- **Podzadania:** prefiks `_` w nazwie pliku (np. `_podzadanie.md`)
-- **Emoji priorytetów w dashboard:** 🔴 pilne | 🟡 wazne | 🟢 normalne
+- **Zadanie = jedna linia w `Zadania/Dashboard.md`:** `- [ ] Nazwa — 🔴 · DD.MM` — dodawaj przez `/utworz-zadanie` albo ręcznie; `/daily` archiwizuje odhaczone i przestawia sekcje wg terminu
+- **Priorytety:** 🔴 pilne | 🟡 wazne | 🟢 normalne
+- **Bez plików zadań** — notatka w `Zadania/notatki/` z linkiem 📎 w linii tylko wtedy, gdy są szczegóły do zachowania (kontakt, dane, kroki)
 ```
 
 3. Zapisz do `.claude/CLAUDE.md`
@@ -469,20 +547,9 @@ Dodaj `Marketing/`, `Notatki/`, `Brudnopis.md` jeśli zostały wybrane w kroku 1
 
 ---
 
-## KROK 13: WALIDACJA SPÓJNOŚCI
+## KROK 13: SPRAWDZENIE PLIKÓW
 
-Przeczytaj wygenerowane pliki i sprawdź:
-
-| Check | Co sprawdzam | Jak naprawić |
-|-------|-------------|-------------|
-| persona ↔ soul | Czy soul.md odzwierciedla preferencje z persona.md? | Automatycznie dopasuj soul.md |
-| Anty-wzorce | Czy "czego nie robię" w soul.md pokrywa "co wkurza w AI" z persona? | Dodaj brakujące punkty do soul.md |
-| Formalność | Czy ton soul.md pasuje do formalności z persona? | Dostosuj język soul.md |
-| CLAUDE.md kompletność | Czy router wskazuje na wszystkie utworzone pliki? | Dodaj brakujące wpisy |
-| Struktura | Czy wszystkie foldery wymienione w CLAUDE.md istnieją? | Utwórz brakujące lub usuń z listy |
-
-**Drobne poprawki** → napraw automatycznie bez pytania.
-**Duże niespójności** → zgłoś userowi i zapytaj co zrobić.
+Sprawdź, czy każdy folder wymieniony w CLAUDE.md istnieje i czy router wskazuje wszystkie utworzone pliki z `.claude/rules/`; braki uzupełnij. Treści persona.md i soul.md po akceptacji nie zmieniaj — rozjazd między nimi zgłoś userowi.
 
 **Ślad walidacji jest OBOWIĄZKOWY** — po wykonaniu checków wypisz userowi wynik,
 jedna linia per check (`✅ persona ↔ soul — spójne` / `⚠️ Anty-wzorce — dopisałem 2 punkty do soul.md`).
@@ -513,7 +580,7 @@ Utworzone pliki:
 📄 .claude/rules/content/voice-of-tone.md — styl pisania treści [TYLKO jeśli utworzony]
 📄 .claude/rules/content/ai-writing-patterns.md — wzorce unikania "AI voice" w tekstach
 📄 .claude/CLAUDE.md — router systemu
-📁 Zadania/ — system zadań (z dashboardem, cyklicznymi, szablonami)
+📁 Zadania/ — lista zadań (Dashboard) i zadania cykliczne
 📁 Zasoby/ — materiały
 📁 [dodatkowe foldery jeśli wybrane]
 
@@ -533,7 +600,9 @@ Pomiń linijkę z biznes.md jeśli nie został utworzony.
 - **Nie wymyślaj** — persona i soul bazują TYLKO na odpowiedziach usera
 - **Review obowiązkowy** — persona.md i soul.md MUSZĄ być pokazane userowi do akceptacji przed zapisem
 - **Iteracja** — jeśli user chce zmiany → popraw i pokaż ponownie, bez limitu iteracji
-- **Templates z tego skilla** — pliki do Zadania/ kopiuj z `templates/` w tym skillu, NIE twórz od zera
+- **Templates z tego skilla** — pliki do Zadania/ kopiuj z `templates/` w tym skillu, NIE twórz od zera.
+  Pliki `.md` kopiuj przez Read + Write, nie `cp` — niektóre pluginy (np. hook `md-guard`) blokują
+  zapis `.md` przez Bash. Pliki `.css` i `.json` możesz kopiować `cp`
 - **Foldery** — twórz wszystkie potrzebne foldery automatycznie (mkdir -p)
 - **Język** — pisz w języku w jakim mówi user (jeśli po polsku → wszystko po polsku)
 
@@ -543,7 +612,7 @@ Pomiń linijkę z biznes.md jeśli nie został utworzony.
 
 Kontekst dla usera i dla Ciebie, gdy ktoś pyta „skąd się bierze Skrzynka" albo „czemu moje
 odhaczenie zniknęło". Sama Skrzynka **nie jest** produktem tego skilla — generuje ją Puls
-(claude-cron). Onboard dostarcza tylko **motyw** (snippety CSS).
+(claude-cron). Onboarding dostarcza tylko **motyw** (snippety CSS).
 
 **Co się dzieje co minutę** — script-job Pulsa „Team OS — inbox sync" robi `push` → `pull`
 w jednym procesie (kolejność jest istotna: najpierw wysyła Twoje odhaczenia, dopiero potem
@@ -552,7 +621,7 @@ przerysowuje plik):
 | Krok | Co robi | Czego dotyka |
 |------|---------|--------------|
 | `push` | Czyta **odhaczone** checkboxy z sekcji „Otrzymane". `- [x] Zrobione` (zadanie) → zgłasza wykonanie do huba, nadawca dostaje potwierdzenie. `- [x] Zapoznane` (pytanie/odpowiedź) → domyka wątek bez odpowiedzi. Zamkniętą nitkę dopisuje do archiwum | `Zadania/Skrzynka.md` (odczyt), `Zasoby/inbox-archive/YYYY-MM.md` (zapis, jeden blok na wątek — ponowne domknięcie **podmienia** blok, nie dokłada duplikatu) |
-| `pull` | Pobiera aktywne wątki z huba i **przepisuje w całości** bloki między markerami: `%% inbox:items:start/end %%` (Otrzymane) i `%% delegated:items:start/end %%` (Wysłane). Każdy wątek = jedna zwijana karta z nitką wiadomości i JEDNYM checkboxem. Brakujące klucze frontmattera (w tym `cssclasses: [skrzynka]`) domergowuje przy każdym przebiegu — wartości już obecne zostawia nietknięte. Zapisuje **tylko przy realnej zmianie treści** | `Zadania/Skrzynka.md` (blok między markerami + frontmatter) |
+| `pull` | Pobiera aktywne wątki z huba i **przepisuje w całości** bloki między markerami: `%% inbox:items:start/end %%` (Otrzymane) i `%% delegated:items:start/end %%` (Wysłane). Każdy wątek = jedna zwijana karta z nitką wiadomości i JEDNYM checkboxem. Brakujące klucze frontmattera (w tym `cssclasses: [skrzynka]`) domergowuje przy każdym przebiegu — wartości już obecne zostawia nietknięte. Zapisuje **tylko przy realnej zmianie treści** | `Zadania/Skrzynka.md` (blok między markerami + frontmatter), `Zadania/Dashboard.md` (banner top 3 między `%% inbox:banner:start/end %%`) |
 
 **Co robi user:** odhacza checkbox w karcie. Tyle. Odpowiadanie i delegowanie idzie przez
 skill `/deleguj`.
@@ -596,7 +665,7 @@ skonfigurowanym.
 **Czego ten tryb NIE dotyka** (mów to userowi, gdy pyta, czy jest bezpieczny):
 
 - treści `Zadania/Skrzynka.md` — wiadomości, odhaczone checkboxy i markery zostają,
-- archiwum `Zasoby/inbox-archive/`, zadań ani żadnego pliku w `Zadania/`
+- archiwum `Zasoby/inbox-archive/`, Dashboardu, zadań ani żadnego pliku w `Zadania/`
   poza ewentualnym jednym kluczem frontmattera z punktu 3,
 - plików kontekstowych (`persona.md`, `soul.md`, `CLAUDE.md`, `voice-of-tone.md`),
 - flagi `.claude/.onboarded` — tryb jej nie tworzy i nie kasuje.

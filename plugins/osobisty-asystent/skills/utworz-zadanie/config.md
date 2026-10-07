@@ -1,87 +1,59 @@
 # Config: Utwórz Zadanie
 
+Wspólny kontrakt z `/daily` (`daily/config.md`) — zmieniaj oba pliki razem.
+
 ## Ścieżki
 
-Wszystkie ścieżki są względne do workspace (`$CLAUDE_PROJECT_DIR`).
+Względne do workspace (`$CLAUDE_PROJECT_DIR`).
 
 | Element | Ścieżka |
 |---------|---------|
-| Szablon (workspace) | `Zadania/.szablony/szablon-zadania.md` |
-| Szablon (fallback) | `{baseDir}/templates/szablon-zadania.md` |
-| Folder docelowy | `Zadania/w_trakcie/` |
-| Dashboard | `Zadania/Dashboard.md` (starsze instalacje: `Zadania/to_do.md` — użyj istniejącego) |
-| Wpisy | `Marketing/wpisy/YYYY/` |
+| Dashboard | `Zadania/Dashboard.md` |
+| Notatki do zadań (opcjonalne) | `Zadania/notatki/` |
 
-## Domyślne wartości
+## Format linii
 
-Używaj gdy user nie podał:
+```
+- [ ] Nazwa — [emoji] · DD.MM
+- [ ] Nazwa — [emoji]                              ← bez terminu
+- [ ] Nazwa [[ścieżka/do/pliku|📎]] — [emoji] · DD.MM   ← z linkiem do materiału
+```
 
-| Parametr | Default |
-|----------|---------|
-| priorytet | normalne |
-| termin | (puste) |
-| projekt | (puste) |
-
-## Sygnały z kontekstu
-
-| User mówi | Parametr | Wartość |
-|-----------|----------|---------|
-| pilne, asap, krytyczne, blokuje | priorytet | pilne |
-| ważne, strategiczne | priorytet | wazne |
-| na dzisiaj, do końca dnia | termin | dzisiaj |
-| na jutro | termin | jutro |
-| do [dzień tygodnia] | termin | najbliższy ten dzień |
-| [DD.MM] lub [YYYY-MM-DD] | termin | ta data |
-| claude, infrastruktura, narzędzia | projekt | claude-infra |
-| osobiste, prywatne | projekt | osobiste |
+- `—` to em dash ze spacjami, `·` to kropka środkowa.
+- Termin zawsze `DD.MM` (bez roku).
+- Link: ścieżka od roota vaulta; pliki `.md` bez rozszerzenia, inne (`.html`, `.pdf`) z rozszerzeniem.
 
 ## Priorytety
 
-| Wartość | Emoji | Kiedy używać |
-|---------|-------|--------------|
-| pilne | 🔴 | Krytyczne dla biznesu, blokuje innych, revenue-impacting |
-| wazne | 🟡 | Ważne strategicznie, ale nie blokujące |
-| normalne | 🟢 | Maintenance, research, nice-to-have |
+| Wartość | Emoji | Kiedy |
+|---------|-------|-------|
+| pilne | 🔴 | Blokuje innych, pieniądze, termin nieprzekraczalny |
+| wazne | 🟡 | Ważne, ale nie blokuje |
+| normalne | 🟢 | Reszta (domyślne) |
 
-## Projekty
+## Sekcje Dashboardu (kolejność)
 
-| Wartość | Opis |
-|---------|------|
-| claude-infra | Infrastruktura techniczna, narzędzia AI |
-| osobiste | Projekty osobiste |
-| inne | Nieskategoryzowane |
-| (puste) | Bez projektu - w frontmatter zostaw `projekt:` puste |
+Nagłówki **bez emoji** — pełny opis w `daily/config.md` → „Sekcje Dashboardu”.
 
-> Projekty to lista otwarta — user dodaje własne pod swoje potrzeby (folder `Zadania/projekty/`).
+| Nagłówek (początek) | Warunek |
+|---------------------|---------|
+| `## Zaległe` | termin w przeszłości |
+| `## Dzisiaj` | termin = dziś (`## Dzisiaj, poniedziałek 28.09`) |
+| `## [Dzień_tygodnia] DD.MM` | termin = dzień z okna tygodnia (`## Wtorek 29.09`) |
+| `## Później` | termin poza oknem tygodnia (także sobota i niedziela) |
+| `## Bez terminu` | brak terminu |
 
-## Terminy - konwersja
+**Okno tygodnia:** dziś pn–czw → od jutra do piątku; dziś pt → brak; dziś sob/nd → pn–pt następnego tygodnia.
 
-| Input | Output |
-|-------|--------|
-| dzisiaj | YYYY-MM-DD (bieżąca data) |
-| jutro | YYYY-MM-DD (+1 dzień) |
-| pojutrze | YYYY-MM-DD (+2 dni) |
-| YYYY-MM-DD | bez zmian |
-| brak / puste | zostaw puste w frontmatter |
+Sortowanie w sekcji: termin rosnąco → priorytet (pilne > wazne > normalne).
 
-## Sekcje dashboardu
+## Terminy — sygnały z wypowiedzi
 
-| Sekcja | Warunek |
-|--------|---------|
-| DZISIAJ | termin = dzisiaj |
-| TEN TYDZIEŃ | termin 1-7 dni od dzisiaj |
-| PÓŹNIEJ | termin > 7 dni |
-| BEZ TERMINU | brak terminu |
-
-## Format wpisu w dashboardzie
-
-```
-- [ ] [[w_trakcie/nazwa-pliku|Tytuł zadania]] - [emoji] [priorytet] - [DD.MM]
-```
-
-Podzadanie (ma rodzica):
-```
-- [ ] [[w_trakcie/_nazwa|↳ Tytuł podzadania]] - [emoji] [priorytet] - [DD.MM]
-```
-
-Sortowanie w sekcji: termin (rosnąco) → priorytet (pilne > wazne > normalne)
+| User mówi | Termin |
+|-----------|--------|
+| dzisiaj, do końca dnia | dziś |
+| jutro | +1 dzień |
+| pojutrze | +2 dni |
+| do [dzień tygodnia] | najbliższy taki dzień (dziś się nie liczy) |
+| DD.MM / YYYY-MM-DD | ta data |
+| brak / nic | bez terminu |

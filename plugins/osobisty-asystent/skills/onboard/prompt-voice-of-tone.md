@@ -11,7 +11,7 @@ zmyślony i bezużyteczny.
 - **Masz min. 5 próbek** (posty / maile / wpisy usera) → generuj.
 - **Mniej niż 5 albo brak** → NIE generuj. Powiedz userowi: *"Voice-of-tone tworzymy
   z Twoich tekstów — wróćmy do tego, gdy będziesz mieć kilka postów. Skill `/reflect`
-  i `/x-weekly-analysis` zbudują go z czasem."* i pomiń.
+  zbuduje go z czasem."* i pomiń.
 
 ## Co robisz
 
@@ -24,7 +24,7 @@ zmyślony i bezużyteczny.
    - czego unika (sztuczność, korpomowa, konkretne słowa)
 2. Wygeneruj plik wg struktury poniżej — **tylko to, co realnie widać w próbkach**.
 3. Sekcje DATA-DRIVEN (skuteczność/ranking) zostaw jako placeholder — dojrzeją przez
-   `/x-weekly-analysis` (metryki) i `/reflect`. Na starcie nie masz danych o konwersji.
+   `/reflect`. Na starcie nie masz danych o konwersji.
 
 ## Struktura pliku
 
@@ -67,8 +67,8 @@ NIE wymyślaj rankingu skuteczności — na starcie nie ma danych o metrykach.]
 Np. "nie zaczyna od pytania retorycznego", "zero korpomowy".]
 
 ## SKUTECZNOŚĆ WG DANYCH
-*[Placeholder — uzupełniane automatycznie przez /x-weekly-analysis, gdy nazbiera się
-metryk (które hooki/struktury konwertują). Na razie puste.]*
+*[Placeholder — uzupełniane przez /reflect, gdy nazbiera się danych o tym,
+które hooki i struktury działają. Na razie puste.]*
 
 ---
 *Wygenerowane z [N] próbek: [data]. Żywy dokument — rośnie z każdą analizą.*
@@ -78,7 +78,10 @@ metryk (które hooki/struktury konwertują). Na razie puste.]*
 
 1. **Tylko z próbek** — zero zmyślania stylu, zero generycznych porad copywriterskich
 2. **Min. 5 próbek** — inaczej skip (patrz warunek wstępny)
-3. **Krótko na starcie** — to v0. Plik urośnie z danymi (x-weekly-analysis, reflect)
+3. **Krótko na starcie** — to v0. Plik urośnie z danymi (/reflect)
 4. **Powtarzalność** — wzorzec musi wracać w kilku próbkach, nie być jednorazowy
 5. **Język usera** — jeśli pisze po polsku → voice-of-tone po polsku
 6. **Zapis:** `.claude/rules/content/voice-of-tone.md` (utwórz folder `content/` jeśli brak)
+7. **Bez frontmattera przy zapisie** — krok 10 onboardu dopisze `paths` (ładowanie tylko przy
+   pracy w `Marketing/`), jeśli user wybierze ten folder. Bez `Marketing/` plik zostaje bez
+   `paths` i ładuje się zawsze.

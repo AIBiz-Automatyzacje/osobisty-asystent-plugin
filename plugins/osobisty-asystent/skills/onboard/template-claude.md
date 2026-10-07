@@ -6,6 +6,12 @@ Pliki w `.claude/rules/` ładują się automatycznie do system promptu — bez i
 
 {{RULES_LIST}}
 
+### Wczytywanie kontekstu on-demand
+
+{{ON_DEMAND}}
+
+**Kolejność przy tekstach:** najpierw draft (w stylu z `voice-of-tone.md`, jeśli istnieje), POTEM self-check wg `ai-writing-patterns.md` jako osobny przebieg redaktorski — przed pokazaniem draftu, nie po korekcie.
+
 ## Konfiguracja Claude Code (.claude/)
 
 Folder `.claude/` zawiera konfigurację Claude Code dla tego workspace:
