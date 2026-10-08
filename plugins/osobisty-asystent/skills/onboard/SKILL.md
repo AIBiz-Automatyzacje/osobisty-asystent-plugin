@@ -444,7 +444,7 @@ tabela on-demand w CLAUDE.md). Bez `Marketing/` plik zostaje bez frontmattera i 
 **Wyświetl tekst (bez pytań):**
 
 ```
-📦 Twój system ma 5 wbudowanych skilli — działają od razu:
+📦 Twój system ma 7 wbudowanych skilli — działają od razu:
 
 /daily            — codzienne porządki: archiwizacja zrobionych zadań,
                     regeneracja dashboardu, raport co nowego
@@ -454,11 +454,15 @@ tabela on-demand w CLAUDE.md). Bez `Marketing/` plik zostaje bez frontmattera i 
                     Twoje pliki kontekstowe (persona.md, soul.md, voice-of-tone.md)
 /utworz-zadanie   — dopisuje zadanie do Dashboardu: nazwa, priorytet,
                     termin (możesz też dopisać linię ręcznie)
+/koniec-sesji     — na koniec pracy nad projektem zapisuje, gdzie skończyłeś,
+                    i daje prompt do wklejenia na start następnej sesji
 /skill-scout      — raz w tygodniu przegląda Twoje logi i wyławia powtarzalną
                     ręczną robotę, którą warto opakować w kolejny skill
+/kie-generate     — grafiki i wideo AI (wymaga klucza Kie.ai — powiedz
+                    „skonfiguruj kie-generate”, gdy będziesz chciał zacząć)
 
 Wszystkie działają od razu — wystarczy wpisać /nazwa w Claude Code.
-Dodatkowe skille (email, social media, generowanie grafik...) to osobny
+Dodatkowe skille (email, social media...) to osobny
 materiał — możesz je doinstalować w dowolnym momencie.
 ```
 
@@ -504,7 +508,7 @@ na ścieżkach `Marketing/**`; poza `Marketing/` wczytujesz go jawnie wg tabeli.
 
 Nie ma voice-of-tone → pomiń zdanie i wiersz o nim.
 
-**{{SKILLS_LIST}}** — lista 5 skilli core:
+**{{SKILLS_LIST}}** — lista 7 skilli core:
 
 ```
 **Workflow / Zarządzanie:**
@@ -512,7 +516,9 @@ Nie ma voice-of-tone → pomiń zdanie i wiersz o nim.
 - `memory-update` - aktualizacja NOW.md (bieżący kontekst pracy) z logów sesji
 - `reflect` - walidacja obserwacji o użytkowniku → aktualizacja plików kontekstowych
 - `utworz-zadanie` - tworzenie nowego zadania w systemie Obsidian
+- `koniec-sesji` - zapis stanu projektu do `_KONTEKST.md` + prompt wznowieniowy
 - `skill-scout` - tygodniowy przegląd logów: wykrywa powtarzalną ręczną robotę do opakowania w skill
+- `kie-generate` - grafiki i wideo AI przez Kie.ai (klucz w `.env`, brand w `.claude/kie-brand.md`)
 ```
 
 **{{FOLDER_STRUCTURE}}** — mapa workspace na podstawie FAKTYCZNIE utworzonych folderów:

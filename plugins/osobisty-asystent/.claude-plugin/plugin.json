@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "osobisty-asystent",
   "displayName": "Osobisty Asystent AI",
-  "description": "Zbuduj własnego osobistego asystenta AI w Obsidian + Claude Code. Wizard /onboard tworzy Twój profil i listę zadań, a skille (daily, utworz-zadanie, memory-update, reflect, skill-scout) prowadzą codzienną pracę. Zaawansowane: zdalna-sesja (asystent na VPS z telefonu), deleguj i plugin-zespolowy (Team OS).",
+  "description": "Zbuduj własnego osobistego asystenta AI w Obsidian + Claude Code. Wizard /onboard tworzy Twój profil i listę zadań, a skille (daily, utworz-zadanie, memory-update, reflect, koniec-sesji, skill-scout, kie-generate) prowadzą codzienną pracę. Zaawansowane: zdalna-sesja (asystent na VPS z telefonu), deleguj i plugin-zespolowy (Team OS).",
   "author": {
     "name": "AIBIZ Sp. z o.o.",
     "email": "kontakt@akademiaautomatyzacji.com",

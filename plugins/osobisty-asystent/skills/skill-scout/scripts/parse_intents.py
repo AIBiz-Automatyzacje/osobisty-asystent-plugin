@@ -4,7 +4,7 @@ parse_intents.py — Ekstrakcja PRÓŚB usera z logów sesji Claude Code.
 
 W przeciwieństwie do parsera reflect (USER + ASSISTANT, dialog),
 ten skrypt wyciąga TYLKO wiadomości usera — bo skill-scout szuka
-powtarzającej się ręcznej roboty, którą Kacper ZLECA, a nie tego
+powtarzającej się ręcznej roboty, którą user ZLECA, a nie tego
 co odpowiada asystent. Każda prośba dostaje datę, żeby downstream
 LLM mógł policzyć ile razy w oknie pojawił się ten sam typ roboty.
 

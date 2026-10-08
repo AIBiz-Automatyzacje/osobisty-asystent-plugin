@@ -19,7 +19,9 @@ Skille do codziennej pracy:
 - `/utworz-zadanie` — dopisuje zadanie do Dashboardu (nazwa, priorytet, termin)
 - `/memory-update` — aktualizuje `NOW.md` (bieżący kontekst pracy) z Twoich rozmów
 - `/reflect` — analizuje sesje i proponuje poprawki w profilu i stylu asystenta
+- `/koniec-sesji` — na koniec pracy nad projektem zapisuje jego stan do `_KONTEKST.md` i daje prompt na start następnej sesji
 - `/skill-scout` — raz w tygodniu wyłapuje powtarzalną robotę, którą warto zamienić w skill
+- `kie-generate` — grafiki i wideo AI przez Kie.ai; konfiguracja: powiedz „skonfiguruj kie-generate” (potrzebny klucz Kie.ai, opcjonalnie ImgBB)
 
 Zaawansowane (dalsze moduły kursu): `/zdalna-sesja`, `/deleguj`, `/plugin-zespolowy` — opis niżej.
 
