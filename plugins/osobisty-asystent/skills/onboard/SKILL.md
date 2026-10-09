@@ -415,10 +415,10 @@ Jak działa Skrzynka — patrz „Skrzynka Team OS — flow" na dole tego pliku.
 
 | # | Pytanie | Header | multiSelect | Opcje (label · description) |
 |---|---------|--------|-------------|-----|
-| 1 | Jakie dodatkowe foldery chcesz? | Foldery | true | **Marketing/** · Wpisy, media, pomysły — do contentu i social media · **Notatki/** · Spotkania, rozmowy, braindumpy · **Brudnopis.md** · Szybkie notatki, scratch pad — jeden plik na wszystko |
+| 1 | Jakie dodatkowe foldery chcesz? | Foldery | true | **Marketing/** · Wpisy i grafiki — do contentu i social media · **Notatki/** · Spotkania, rozmowy, braindumpy · **Brudnopis.md** · Szybkie notatki, scratch pad — jeden plik na wszystko |
 
 Utwórz wybrane:
-- `Marketing/` → utwórz subfoldery: `wpisy/`, `media/`, i plik `pomysły.md` (pusty z nagłówkiem)
+- `Marketing/` → utwórz subfoldery: `wpisy/` i `media/`
 - `Notatki/` → utwórz subfoldery: `spotkania/`
 - `Brudnopis.md` → pusty plik z nagłówkiem `# Brudnopis`
 
@@ -527,10 +527,11 @@ Nie ma voice-of-tone → pomiń zdanie i wiersz o nim.
 - `.claude/` - konfiguracja Claude Code
 - `Zadania/` - system zarządzania zadaniami
   - `Dashboard.md` - lista zadań (jedno zadanie = jedna linia)
-  - `projekty/` - notatki projektowe
+  - `projekty/` - jeden folder na projekt; stan projektu w `projekty/<projekt>/_KONTEKST.md` (prowadzi go `/koniec-sesji`)
+  - `notatki/` - szczegóły do zadań (kontakt, dane, kroki), linkowane z linii zadania jako 📎; folder powstaje przy pierwszej notatce
   - `zrobione/` - archiwum wykonanych zadań (`YYYY-MM.md`)
   - `cykliczne/recurring.md` - zadania cykliczne
-- `Zasoby/` - materiały zewnętrzne
+- `Zasoby/` - baza wiedzy: tu zapisujesz wszystko, co user podsyła do zachowania (linki, artykuły, transkrypcje filmów, research, materiały) i stąd odpowiadasz na pytania o te materiały. Domyślne miejsce zapisu, gdy user nie wskaże innego
 ```
 
 Dodaj `Marketing/`, `Notatki/`, `Brudnopis.md` jeśli zostały wybrane w kroku 10.
