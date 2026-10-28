@@ -90,7 +90,9 @@ Adresata wyprowadza z wątku (oryginalny nadawca task/query; gdy wątek założy
 
 Gdy wątek jest już domknięty (nie ma go w skrzynce), podaj adresata jawnie: `--to <nick>`.
 
-**Zwraca:** `{ id, thread_id, to_user, title, type: 'reply' }`
+**Odpowiedź = przeczytane.** Po wysyłce skrypt sam domyka wszystkie otwarte wiadomości wątku zaadresowane do Ciebie (akcja `Zapoznane`, także przy zadaniu — nadawca dostaje Twoją odpowiedź, bez dodatkowego „Zrobione ✅") i archiwizuje nitkę. Wątek znika z Otrzymanych; gdy druga strona odpisze, wróci do Skrzynki jako nowa wiadomość. Nie wołaj po `reply` jeszcze `close` ani nie odhaczaj „Zapoznane”.
+
+**Zwraca:** `{ id, thread_id, to_user, title, type: 'reply', auto_close }` — `auto_close` to `{ closed, archived }`; przy `error` albo `skipped` wątek został otwarty, powiedz o tym userowi i domknij go `close`.
 
 ### `close` — zamknięcie threadu bez odpowiedzi
 
