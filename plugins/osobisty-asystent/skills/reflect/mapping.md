@@ -157,6 +157,8 @@ Sekcje persona.md odpowiadają strukturze generowanej przez `onboarding/prompt-p
 | Jawna decyzja o strukturze | „od teraz grafiki trzymamy w X” | ADD/UPDATE |
 | Nowa konwencja nazw plików | „notatki ze spotkań jako DD.MM.YYYY” | ADD/UPDATE |
 | Nowy skill / hook / job, którego nie ma w listingu | „dodałem hook X” | ADD |
+| Narzędzie zawodzi tak samo w ≥2 sesjach i znalazło się obejście | „MCP nie widzi części faktur → sprawdź panel”, „API nie ma wysyłki testowej → idzie przez X” | ADD (jedna linia: objaw → obejście) |
+| ⚠️ Jednorazowa awaria albo błąd bez znalezionego obejścia | „dziś API zwracało 500” | SKIP (bloker → NOW.md) |
 | ⚠️ Preferencja osobista | „nie pisz tak długo” | → persona/soul, NIE CLAUDE.md |
 | ⚠️ Stan projektu | „live przesunięty na 22.10” | → NOW.md, NIE CLAUDE.md |
 

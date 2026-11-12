@@ -31,6 +31,16 @@ Napisz:
 
 Jeden wpis, pełny obraz, data ostatniego update'u.
 
+### Najpierw weryfikacja, potem przepisanie
+
+Lista `WERYFIKACJA` z ekstrakcji mówi, co z obecnego NOW.md przetrwało tydzień:
+- `POTWIERDZONY` → wpis zostaje (ewentualnie skrócony przy konsolidacji)
+- `ZAPRZECZONY` jawną decyzją usera albo faktem, który się po prostu zmienił → wpis poprawiony na aktualny stan
+- `ZAPRZECZONY` pojedynczą wzmianką, kontra wpis oparty na słowach usera → wpis zostaje z dopiskiem `⚠️ rozjazd: X (DD.MM) vs Y (DD.MM)`; nie zgaduj, która wersja jest prawdziwa
+- `BEZ_SLADU` → projekt idzie do „stalled” (reguła niżej); bloker, otwarta decyzja i ustalenie zostają, chyba że łapią się na reguły wieku
+
+Znacznik `⚠️ rozjazd` z poprzednich tygodni znika, gdy user rozstrzygnął wprost albo oba źródła mówią już to samo. Rozjazdy wypisz w podsumowaniu.
+
 ### Tabela projektów — przepisanie
 
 Dla każdego projektu w tabeli:
@@ -49,7 +59,7 @@ Przepisz na podstawie tego co **realnie dominowało** w tygodniu (z logów), nie
 |---------------|---------------|
 | Jednorazowy event (wpis napisany, deploy, nagranie) | **Usuń** — to event log, nie kontekst |
 | Trwała decyzja (cenowa, architekturalna, technologiczna) | **Zostaw** dopóki obowiązuje |
-| Decyzja cofnięta lub zmieniona w tygodniu | **Zastąp** nową decyzją, usuń starą |
+| Decyzja cofnięta lub zmieniona w tygodniu przez usera | **Zastąp** nową decyzją, usuń starą |
 | Ustalenie starsze niż 14 dni | **Usuń** — jeśli nadal ważne, powinno być w uwagach projektu |
 
 Po cleanup skonsoliduj: wiele ustaleń dot. jednego projektu → jeden wpis.

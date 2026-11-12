@@ -32,8 +32,10 @@ Zaktualizuj NOW.md na podstawie nowych sygnałów z sesji. NOW.md to dynamiczny 
 | Wzorzec pracy | Zostaw (trwale, chyba że zmiana) |
 
 ### Conflict resolution
-- Nowsze fakty nadpisują starsze (dodaj datę)
-- Nowsza decyzja nadpisuje starą
+- **Nowsza jawna decyzja usera** (sygnał `HIGH` z cytatem) zastępuje starszy wpis — bez śladu po starej wersji
+- **Fakt, który po prostu się zmienił** (status, etap, liczba) → nowszy nadpisuje starszy
+- **Wzmianka przeczy decyzji usera** (sygnał `MEDIUM` albo bez cytatu kontra wpis oparty na jego słowach) → NIE nadpisuj. Zostaw wpis i dopisz przy nim `⚠️ rozjazd: X (DD.MM) vs Y (DD.MM)`. Nie zgaduj, która wersja jest prawdziwa
+- Znacznik `⚠️ rozjazd` znika, gdy user rozstrzygnie wprost albo oba źródła zaczną mówić to samo; rozjazdy wypisz w podsumowaniu
 - Priorytety: zamień, nie kumuluj (max 5)
 
 ## Format NOW.md

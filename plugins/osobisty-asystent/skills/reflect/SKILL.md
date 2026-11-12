@@ -135,7 +135,9 @@ Przeskanuj dialog z 7 dni. Filtr **ostrzejszy** niż interactive:
 - Pomiń stabilne fakty o firmie/pracy (→ biznes.md) i bieżące projekty (→ NOW.md).
 - **CLAUDE.md:** tylko trwałe ustalenia o projekcie — gdzie co leży, konwencje nazw, nowy skill
   lub infrastruktura, zmieniony sposób pracy z plikami. Próg: jawna decyzja usera („od teraz
-  zapisujemy X w Y”) albo to samo ustalenie w ≥2 sesjach. Preferencje osobiste → persona/soul,
+  zapisujemy X w Y”) albo to samo ustalenie w ≥2 sesjach. Do tego potknięcia narzędzi: to samo
+  narzędzie zawiodło w ten sam sposób w ≥2 sesjach i w sesji znalazło się obejście → jedna linia
+  „objaw → obejście” w sekcji o infrastrukturze (w propozycji podaj obie sesje z datą). Preferencje osobiste → persona/soul,
   nie CLAUDE.md. Szczegóły w `mapping.md` → sekcja CLAUDE.md.
 
 ### 6w. Zapisz propozycje do `_reflect-pending.md` (NIE edytuj plików!)
